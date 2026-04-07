@@ -1,0 +1,124 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║           StyleSync — docker-compose.yml                     ║
+# ║    Stack complète : API + Nginx reverse proxy                ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+services:
+
+  # ── API Node.js ──────────────────────────────────────────────
+  api:
+    build:
+      context: .          # Racine = dossier stylesync-backend/
+      dockerfile: Dockerfile
+    container_name: stylesync-api
+    restart: unless-stopped
+
+    # Secrets via fichier .env (jamais dans ce fichier !)
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+
+    # L'API n'est PAS exposée directement sur l'hôte.
+    # Seul Nginx y accède via le réseau interne.
+    expose:
+      - "3000"
+
+    networks:
+      - internal
+
+    # Durcissement runtime
+    security_opt:
+      - no-new-privileges:true   # Empêche l'élévation de privilèges
+    read_only: true               # Système de fichiers en lecture seule
+    tmpfs:
+      - /tmp:size=50m,mode=1777  # /tmp inscriptible (multer buffers)
+
+    # Limites ressources (éviter un DoS qui épuise le serveur)
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+
+    # Capacités Linux réduites au strict minimum
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE   # Bind sur port < 1024 (pas nécessaire ici, mais conservé)
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+
+  # ── Nginx — Reverse Proxy ─────────────────────────────────────
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: stylesync-nginx
+    restart: unless-stopped
+
+    ports:
+      - "80:80"      # HTTP → redirige vers HTTPS (ou utilisez uniquement 443)
+      # - "443:443"  # Décommentez si vous avez un certificat TLS
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      # - ./certs:/etc/nginx/certs:ro   # Décommentez pour TLS
+
+    depends_on:
+      api:
+        condition: service_healthy
+
+    networks:
+      - internal
+      - external
+
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:size=50m
+      - /var/run:size=10m
+      - /tmp:size=10m
+
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETUID
+      - SETGID
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+
+# ── Réseaux ───────────────────────────────────────────────────
+networks:
+  internal:
+    # Réseau privé API ↔ Nginx (pas d'accès externe)
+    internal: true
+    driver: bridge
+
+  external:
+    # Réseau public pour Nginx uniquement
+    driver: bridge
