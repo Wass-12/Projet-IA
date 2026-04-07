@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendrier — Garde-robe</title>
+<link rel="stylesheet" href="calendrier.css">
+</head>
+<body>
+
+<!-- ========================================
+     EN-TÊTE : navigation mois + titre
+======================================== -->
+<header>
+  <button class="nav-btn" id="prevBtn" onclick="shiftMonth(-1)" aria-label="Mois précédent">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="header-center">
+    <div class="month-title" id="monthTitle">Avril 2026</div>
+    <div class="month-sub" id="monthSub">0 tenue enregistrée</div>
+  </div>
+
+  <button class="nav-btn" id="nextBtn" onclick="shiftMonth(1)" aria-label="Mois suivant">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</header>
+
+<!-- ========================================
+     LÉGENDE DES MODES (passé / planifié)
+======================================== -->
+<div class="legend">
+  <span class="legend-item">
+    <span class="legend-dot worn"></span>Porté
+  </span>
+  <span class="legend-item">
+    <span class="legend-dot planned"></span>Planifié
+  </span>
+  <span class="legend-item">
+    <span class="legend-dot today"></span>Aujourd'hui
+  </span>
+</div>
+
+<!-- ========================================
+     GRILLE CALENDRIER
+======================================== -->
+<div class="calendar-wrap">
+  <div class="weekdays">
+    <span>Lun</span><span>Mar</span><span>Mer</span>
+    <span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+  </div>
+  <div class="calendar-grid" id="calendarGrid"></div>
+</div>
+
+<!-- ========================================
+     PANNEAU JOUR (bottom sheet)
+======================================== -->
+<div class="day-panel" id="dayPanel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-date" id="panelDate">—</div>
+      <div class="panel-status" id="panelStatus"></div>
+    </div>
+    <button class="close-btn" onclick="closePanel()" aria-label="Fermer">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
+  <div class="panel-actions" id="panelActions"></div>
+</div>
+
+<!-- ========================================
+     OVERLAY PICKER DE VÊTEMENT
+======================================== -->
+<div class="picker-overlay" id="pickerOverlay">
+  <div class="picker-card">
+    <div class="picker-header">
+      <div class="picker-title" id="pickerTitle">Choisir une tenue</div>
+      <button class="close-btn" onclick="closePicker()">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="picker-search">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M10 10l2.5 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="pickerSearch" placeholder="Rechercher…" oninput="filterPicker(this.value)">
+    </div>
+    <div class="picker-filters" id="pickerFilters"></div>
+    <div class="picker-grid" id="pickerGrid"></div>
+    <div class="picker-footer">
+      <button class="confirm-btn" id="confirmBtn" onclick="confirmSelection()" disabled>
+        Confirmer la sélection
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     PANNEAU ANTI-RÉPÉTITION (premium)
+======================================== -->
+<div class="repetition-panel" id="repetitionPanel">
+  <div class="rep-header">
+    <div>
+      <div class="rep-title">Anti-répétition</div>
+      <div class="rep-sub">30 derniers jours</div>
+    </div>
+    <span class="premium-badge">Premium</span>
+  </div>
+  <div class="rep-list" id="repList"></div>
+</div>
+
+<!-- ========================================
+     TOAST DE CONFIRMATION
+======================================== -->
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M2 7l3.5 3.5 6.5-6" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  <span id="toastMsg">Tenue enregistrée</span>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

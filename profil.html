@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleSync — Profil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0b;
+    --bg2: #111113;
+    --bg3: #1a1a1d;
+    --bg4: #222226;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0ede8;
+    --text2: #8a8882;
+    --text3: #555450;
+    --gold: #c9a96e;
+    --gold2: #e8c98a;
+    --gold-dim: rgba(201,169,110,0.12);
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px; font-weight: 300;
+    letter-spacing: 0.08em; color: var(--text); text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a {
+    font-size: 13px; font-weight: 300; letter-spacing: 0.06em;
+    color: var(--text2); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-links a.active { color: var(--gold); }
+  .btn-nav {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold) !important;
+    border: 1px solid rgba(201,169,110,0.35);
+    padding: 8px 20px; border-radius: 2px;
+    transition: background 0.2s, border-color 0.2s !important;
+  }
+  .btn-nav:hover { background: var(--gold-dim) !important; border-color: var(--gold) !important; }
+
+  /* ── PAGE LAYOUT ── */
+  .page-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 48px 80px;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+  }
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 300; line-height: 1.05; letter-spacing: -0.01em;
+    color: var(--text); margin-bottom: 12px;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .page-title em { font-style: italic; color: var(--gold); }
+  .page-desc {
+    font-size: 15px; font-weight: 300; color: var(--text2); max-width: 560px;
+    line-height: 1.8; margin-bottom: 52px;
+    opacity: 0; animation: fadeUp 0.7s 0.3s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── COMPLETENESS BAR ── */
+  .profile-status {
+    display: flex; align-items: center; gap: 20px; margin-bottom: 52px;
+    padding: 20px 24px;
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 4px;
+    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+  }
+  .profile-avatar {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 1px solid rgba(201,169,110,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 20px; font-weight: 300;
+    color: var(--gold); background: var(--gold-dim); flex-shrink: 0;
+  }
+  .profile-meta { flex: 1; }
+  .profile-name { font-size: 16px; font-weight: 400; color: var(--text); margin-bottom: 4px; }
+  .profile-sub { font-size: 12px; font-weight: 300; color: var(--text3); }
+  .profile-score { text-align: right; }
+  .score-num {
+    font-family: var(--font-display); font-size: 32px; font-weight: 300;
+    color: var(--text); line-height: 1;
+  }
+  .score-num span { color: var(--gold); }
+  .score-label { font-size: 11px; color: var(--text3); letter-spacing: 0.06em; margin-top: 4px; }
+  .score-bar {
+    width: 120px; height: 3px; background: var(--bg4); border-radius: 1px;
+    margin-top: 8px; overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%; width: 68%; background: var(--gold); border-radius: 1px;
+    transition: width 1s 0.8s ease-out;
+  }
+
+  /* ── SECTIONS ── */
+  .section-block {
+    margin-bottom: 40px;
+    opacity: 0; animation: fadeUp 0.7s forwards;
+  }
+  .section-block:nth-child(1) { animation-delay: 0.5s; }
+  .section-block:nth-child(2) { animation-delay: 0.6s; }
+  .section-block:nth-child(3) { animation-delay: 0.7s; }
+  .section-block:nth-child(4) { animation-delay: 0.8s; }
+  .section-block:nth-child(5) { animation-delay: 0.9s; }
+
+  .section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .section-impact {
+    font-size: 11px; font-weight: 300; color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+  .section-impact.high { color: rgba(201,169,110,0.6); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 4px;
+    overflow: hidden;
+  }
+  .field-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .field-row:last-child { border-bottom: none; }
+  .field-row:hover { background: var(--bg3); }
+  .field-icon {
+    width: 36px; height: 36px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 16px;
+    background: var(--bg4); border: 1px solid var(--border);
+  }
+  .field-text { flex: 1; }
+  .field-name { font-size: 14px; font-weight: 400; color: var(--text); margin-bottom: 2px; }
+  .field-hint { font-size: 12px; font-weight: 300; color: var(--text3); }
+  .field-value { font-size: 13px; font-weight: 300; color: var(--text2); max-width: 200px; text-align: right; }
+  .field-chevron { font-size: 14px; color: var(--text3); margin-left: 6px; }
+
+  /* Tags */
+  .tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 11px; font-weight: 400; letter-spacing: 0.04em;
+    padding: 4px 12px; border-radius: 99px;
+    border: 1px solid var(--border2); color: var(--text2);
+    cursor: pointer; transition: all 0.15s; background: var(--bg4);
+  }
+  .tag:hover { border-color: rgba(201,169,110,0.3); color: var(--text); }
+  .tag.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(201,169,110,0.4); }
+  .tag.excluded { background: rgba(160,60,60,0.1); color: #c07070; border-color: rgba(160,60,60,0.25); }
+
+  /* Thermal selector */
+  .thermal-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
+  }
+  .thermal-row:last-child { border-bottom: none; }
+  .thermal-btns { display: flex; margin-left: auto; }
+  .thermal-btn {
+    font-size: 12px; font-weight: 400; letter-spacing: 0.04em;
+    padding: 6px 16px; cursor: pointer; border: 1px solid var(--border);
+    background: var(--bg4); color: var(--text3); transition: all 0.15s;
+  }
+  .thermal-btn:first-child { border-radius: 2px 0 0 2px; }
+  .thermal-btn:last-child { border-radius: 0 2px 2px 0; }
+  .thermal-btn:not(:first-child) { border-left: none; }
+  .thermal-btn:hover { color: var(--text2); background: var(--bg3); }
+  .thermal-btn.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(201,169,110,0.4); }
+
+  /* Color dots */
+  .color-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
+  }
+  .color-row:last-child { border-bottom: none; }
+  .color-dots { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+  .cdot {
+    width: 18px; height: 18px; border-radius: 50%;
+    cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    flex-shrink: 0; border: 2px solid transparent;
+  }
+  .cdot:hover { transform: scale(1.15); }
+  .cdot.sel-avoid { border-color: rgba(200,80,80,0.8); box-shadow: 0 0 0 2px rgba(200,80,80,0.2); }
+  .cdot.sel-fav { border-color: rgba(201,169,110,0.9); box-shadow: 0 0 0 2px rgba(201,169,110,0.2); }
+  .cdot-add {
+    width: 18px; height: 18px; border-radius: 50%; cursor: pointer;
+    background: var(--bg4); border: 1px dashed var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--text3); transition: all 0.15s;
+  }
+  .cdot-add:hover { border-color: var(--gold); color: var(--gold); }
+  .color-legend { font-size: 11px; color: var(--text3); margin-left: 8px; }
+
+  /* Toggle switch */
+  .toggle-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle {
+    margin-left: auto; width: 40px; height: 22px; border-radius: 11px;
+    position: relative; cursor: pointer; flex-shrink: 0;
+    background: var(--bg4); border: 1px solid var(--border2);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .toggle.on { background: var(--gold-dim); border-color: rgba(201,169,110,0.4); }
+  .toggle-knob {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--text3); position: absolute; top: 2px; left: 2px;
+    transition: left 0.2s, background 0.2s;
+  }
+  .toggle.on .toggle-knob { left: 20px; background: var(--gold); }
+
+  /* Slider */
+  .slider-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 24px; border-bottom: 1px solid var(--border);
+  }
+  .slider-row:last-child { border-bottom: none; }
+  .slider-wrap { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100px; height: 3px; border-radius: 1px;
+    background: var(--bg4); outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--gold); cursor: pointer;
+    border: 2px solid var(--bg2);
+    box-shadow: 0 0 0 1px rgba(201,169,110,0.3);
+  }
+  .slider-val { font-size: 12px; color: var(--gold); min-width: 32px; text-align: right; font-weight: 400; }
+
+  /* Impact note */
+  .impact-note {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 16px 20px; margin-top: 8px;
+    background: var(--gold-dim); border: 1px solid rgba(201,169,110,0.18);
+    border-radius: 4px;
+  }
+  .impact-dot {
+    width: 4px; flex-shrink: 0; align-self: stretch;
+    background: rgba(201,169,110,0.5); border-radius: 2px;
+  }
+  .impact-text { font-size: 13px; font-weight: 300; color: var(--text2); line-height: 1.7; }
+  .impact-text strong { color: var(--gold); font-weight: 400; }
+
+  /* Missing badge */
+  .badge-missing {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 99px;
+    background: rgba(160,60,60,0.12); color: #c07070;
+    border: 1px solid rgba(160,60,60,0.2);
+  }
+  .badge-ok {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 99px;
+    background: rgba(201,169,110,0.1); color: var(--gold);
+    border: 1px solid rgba(201,169,110,0.2);
+  }
+
+  /* Save button */
+  .save-wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 32px; border-top: 1px solid var(--border);
+    margin-top: 12px;
+    opacity: 0; animation: fadeUp 0.7s 1s forwards;
+  }
+  .save-hint { font-size: 12px; font-weight: 300; color: var(--text3); }
+  .btn-save {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--gold); color: #0a0a0b;
+    padding: 14px 36px; border-radius: 2px; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-save:hover { background: var(--gold2); transform: translateY(-1px); }
+  .btn-save:active { transform: translateY(0); }
+  .btn-save.saved { background: rgba(201,169,110,0.2); color: var(--gold); }
+
+  /* Occasions grid */
+  .occ-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    padding: 18px 24px;
+  }
+  .occ-item {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 4px; padding: 12px 14px; cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .occ-item:hover { border-color: var(--border2); background: var(--bg4); }
+  .occ-item.active { background: var(--gold-dim); border-color: rgba(201,169,110,0.35); }
+  .occ-icon { font-size: 18px; }
+  .occ-label { font-size: 12px; font-weight: 400; color: var(--text2); }
+  .occ-item.active .occ-label { color: var(--gold); }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .page-wrap { padding: 90px 20px 60px; }
+    .occ-grid { grid-template-columns: 1fr 1fr; }
+    .profile-status { flex-wrap: wrap; }
+    .score-bar { width: 100%; }
+    .thermal-btns { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="stylesync.html" class="nav-logo">Style<span>Sync</span></a>
+  <div class="nav-links">
+    <a href="stylesync.html#dashboard">Accueil</a>
+    <a href="stylesync.html#features">Dressing</a>
+    <a href="#" class="active">Profil</a>
+    <a href="calendrier.html">Calendrier</a>
+    <a href="Ajout.html" class="btn-nav">Ajouter</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- En-tête -->
+  <p class="page-eyebrow">Configuration · IA</p>
+  <h1 class="page-title">Votre <em>profil</em></h1>
+  <p class="page-desc">Plus vos préférences sont précises — sensibilité thermique, couleurs évitées, occasions habituelles — plus les suggestions de l'accueil seront justes. Ce panneau est le cœur de votre expérience.</p>
+
+  <!-- Statut de complétion -->
+  <div class="profile-status">
+    <div class="profile-avatar">S</div>
+    <div class="profile-meta">
+      <div class="profile-name">Sophie Laurent</div>
+      <div class="profile-sub">Membre depuis mars 2024 · 47 vêtements</div>
+    </div>
+    <div class="profile-score">
+      <div class="score-num">68<span>%</span></div>
+      <div class="score-label">Profil complété</div>
+      <div class="score-bar"><div class="score-bar-fill" id="scoreBar"></div></div>
+    </div>
+  </div>
+
+  <div id="sections-wrap">
+
+    <!-- ── 1. CONFORT THERMIQUE ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Confort thermique</span>
+        <span class="section-impact high">Impact direct sur les suggestions</span>
+      </div>
+      <div class="card">
+        <div class="thermal-row">
+          <div class="field-icon">🌡</div>
+          <div class="field-text">
+            <div class="field-name">Sensibilité au froid</div>
+            <div class="field-hint">Ajuste le seuil à partir duquel une couche est suggérée</div>
+          </div>
+          <div class="thermal-btns" id="cold">
+            <button class="thermal-btn" data-g="cold" data-v="frileux" onclick="setTherm(this)">Frileux</button>
+            <button class="thermal-btn active" data-g="cold" data-v="normal" onclick="setTherm(this)">Normal</button>
+            <button class="thermal-btn" data-g="cold" data-v="resistant" onclick="setTherm(this)">Résistant</button>
+          </div>
+        </div>
+        <div class="thermal-row">
+          <div class="field-icon">☀️</div>
+          <div class="field-text">
+            <div class="field-name">Tolérance à la chaleur</div>
+            <div class="field-hint">Influence le choix des matières et coupes légères</div>
+          </div>
+          <div class="thermal-btns" id="heat">
+            <button class="thermal-btn" data-g="heat" data-v="sensible" onclick="setTherm(this)">Sensible</button>
+            <button class="thermal-btn active" data-g="heat" data-v="normal" onclick="setTherm(this)">Normal</button>
+            <button class="thermal-btn" data-g="heat" data-v="ok" onclick="setTherm(this)">Très ok</button>
+          </div>
+        </div>
+        <div class="slider-row">
+          <div class="field-icon">💧</div>
+          <div class="field-text">
+            <div class="field-name">Tolérance à la pluie</div>
+            <div class="field-hint">Détermine à quel seuil un imperméable est conseillé</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="10" max="90" value="40" step="10" id="rainSlider" oninput="document.getElementById('rainVal').textContent=this.value+'%'">
+            <span class="slider-val" id="rainVal">40%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 2. COULEURS ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Palette personnelle</span>
+        <span class="section-impact high">Filtrage actif des suggestions</span>
+      </div>
+      <div class="card">
+        <div class="color-row">
+          <div class="field-icon">✕</div>
+          <div class="field-text">
+            <div class="field-name">Couleurs à éviter</div>
+            <div class="field-hint">Jamais proposées dans les tenues — cliquez pour exclure</div>
+          </div>
+          <div class="color-dots" id="avoidDots">
+            <div class="cdot" style="background:#c55a5a;" title="Rouge" onclick="toggleAvoid(this)"></div>
+            <div class="cdot sel-avoid" style="background:#e07c3a;" title="Orange" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#d4a843;" title="Jaune" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#5aad77;" title="Vert" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#4a82c4;" title="Bleu vif" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#8b5ca6;" title="Violet" onclick="toggleAvoid(this)"></div>
+            <div class="cdot sel-avoid" style="background:#c97070;" title="Rose" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#7a5c42;" title="Marron" onclick="toggleAvoid(this)"></div>
+            <div class="cdot-add" title="Autre">+</div>
+          </div>
+        </div>
+        <div class="color-row">
+          <div class="field-icon">♡</div>
+          <div class="field-text">
+            <div class="field-name">Couleurs préférées</div>
+            <div class="field-hint">Mises en avant dans les assemblages suggérés</div>
+          </div>
+          <div class="color-dots" id="favDots">
+            <div class="cdot sel-fav" style="background:#c8b89a;" title="Beige" onclick="toggleFav(this)"></div>
+            <div class="cdot sel-fav" style="background:#2a2a2c;" title="Noir" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#a0b4c8;" title="Bleu ciel" onclick="toggleFav(this)"></div>
+            <div class="cdot sel-fav" style="background:#8fa882;" title="Vert sauge" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#c4a882;" title="Camel" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#e0dcd4;" title="Blanc cassé" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#7a8c8a;" title="Gris ardoise" onclick="toggleFav(this)"></div>
+            <div class="cdot-add" title="Autre">+</div>
+          </div>
+        </div>
+        <div class="color-row" style="border-bottom: none;">
+          <div class="field-icon">⊟</div>
+          <div class="field-text">
+            <div class="field-name">Matières à éviter</div>
+            <div class="field-hint">Filtre les vêtements avec ces compositions</div>
+          </div>
+          <div class="tag-group" id="matiereTags">
+            <span class="tag excluded" onclick="toggleTag(this)">Laine</span>
+            <span class="tag excluded" onclick="toggleTag(this)">Acrylique</span>
+            <span class="tag" onclick="toggleTag(this)">Polyester</span>
+            <span class="tag" onclick="toggleTag(this)">Cuir</span>
+            <span class="tag" onclick="toggleTag(this)">Denim</span>
+            <span class="tag" onclick="toggleTag(this)">Velours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 3. STYLE ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Style vestimentaire</span>
+        <span class="section-impact">Priorité dans les assemblages</span>
+      </div>
+      <div class="card">
+        <div class="field-row" style="cursor:default;" onclick="void(0)">
+          <div class="field-icon">◈</div>
+          <div class="field-text">
+            <div class="field-name">Style principal</div>
+            <div class="field-hint">Détermine l'orientation des suggestions quotidiennes</div>
+          </div>
+          <div class="tag-group" id="styleTags">
+            <span class="tag active" onclick="selectStyle(this)">Minimaliste</span>
+            <span class="tag" onclick="selectStyle(this)">Casual</span>
+            <span class="tag" onclick="selectStyle(this)">Chic</span>
+            <span class="tag" onclick="selectStyle(this)">Sportswear</span>
+            <span class="tag" onclick="selectStyle(this)">Classique</span>
+          </div>
+        </div>
+        <div class="field-row" style="cursor:default;">
+          <div class="field-icon">◉</div>
+          <div class="field-text">
+            <div class="field-name">Morphologie</div>
+            <div class="field-hint">Optimise les coupes suggérées pour votre silhouette</div>
+          </div>
+          <div class="tag-group" id="morphTags">
+            <span class="tag" onclick="selectMorph(this)">Sablier</span>
+            <span class="tag active" onclick="selectMorph(this)">Rectangle</span>
+            <span class="tag" onclick="selectMorph(this)">Trapèze</span>
+            <span class="tag" onclick="selectMorph(this)">Ovale</span>
+          </div>
+        </div>
+        <div class="slider-row">
+          <div class="field-icon">⚖️</div>
+          <div class="field-text">
+            <div class="field-name">Audace stylistique</div>
+            <div class="field-hint">Dose l'originalité des suggestions par rapport au classique</div>
+          </div>
+          <div class="slider-wrap">
+            <span style="font-size:11px;color:var(--text3);white-space:nowrap;">Classique</span>
+            <input type="range" min="0" max="100" value="30" step="10" id="boldSlider" oninput="updateBold(this)">
+            <span style="font-size:11px;color:var(--text3);white-space:nowrap;">Audacieux</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. OCCASIONS ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Occasions habituelles</span>
+        <span class="section-impact">Contextes priorisés</span>
+      </div>
+      <div class="card">
+        <div class="occ-grid">
+          <div class="occ-item active" onclick="toggleOcc(this)">
+            <span class="occ-icon">💼</span>
+            <span class="occ-label">Travail bureau</span>
+          </div>
+          <div class="occ-item active" onclick="toggleOcc(this)">
+            <span class="occ-icon">🍽</span>
+            <span class="occ-label">Dîner / Soirée</span>
+          </div>
+          <div class="occ-item" onclick="toggleOcc(this)">
+            <span class="occ-icon">🏃</span>
+            <span class="occ-label">Sport / Loisirs</span>
+          </div>
+          <div class="occ-item active" onclick="toggleOcc(this)">
+            <span class="occ-icon">☕</span>
+            <span class="occ-label">Week-end casual</span>
+          </div>
+          <div class="occ-item" onclick="toggleOcc(this)">
+            <span class="occ-icon">✈️</span>
+            <span class="occ-label">Voyage</span>
+          </div>
+          <div class="occ-item" onclick="toggleOcc(this)">
+            <span class="occ-icon">🎉</span>
+            <span class="occ-label">Événements formels</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 5. PRÉFÉRENCES IA ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Préférences de l'IA</span>
+        <span class="section-impact">Comportement des suggestions</span>
+      </div>
+      <div class="card">
+        <div class="toggle-row">
+          <div class="field-icon">↺</div>
+          <div class="field-text">
+            <div class="field-name">Valoriser la garde-robe existante</div>
+            <div class="field-hint">Priorise les pièces déjà dans votre dressing</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">✦</div>
+          <div class="field-text">
+            <div class="field-name">Intégrer les tendances saisonnières</div>
+            <div class="field-hint">Modèle mis à jour chaque mois selon la mode actuelle</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">🌿</div>
+          <div class="field-text">
+            <div class="field-name">Filtres durabilité</div>
+            <div class="field-hint">Met en avant les pièces les plus portées et polyvalentes</div>
+          </div>
+          <div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">🔁</div>
+          <div class="field-text">
+            <div class="field-name">Anti-répétition 48h</div>
+            <div class="field-hint">Évite de proposer deux fois la même tenue sur deux jours consécutifs</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">📅</div>
+          <div class="field-text">
+            <div class="field-name">Lecture de l'agenda</div>
+            <div class="field-hint">Adapte les suggestions au contexte de vos événements du jour</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+
+      <div class="impact-note" style="margin-top:16px;">
+        <div class="impact-dot"></div>
+        <div class="impact-text">
+          Votre profil est complété à <strong>68 %</strong>. Renseigner le <strong>budget moyen par pièce</strong> et les <strong>événements formels</strong> améliorerait notablement la précision des suggestions matinales.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end sections-wrap -->
+
+  <!-- Save -->
+  <div class="save-wrap">
+    <span class="save-hint">Modifications sauvegardées automatiquement</span>
+    <button class="btn-save" id="saveBtn" onclick="saveProfile()">Enregistrer</button>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<script>
+  // Thermal buttons
+  function setTherm(btn) {
+    const group = btn.dataset.g;
+    document.querySelectorAll('[data-g="'+group+'"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Avoid colors
+  function toggleAvoid(el) {
+    el.classList.toggle('sel-avoid');
+  }
+
+  // Fav colors
+  function toggleFav(el) {
+    el.classList.toggle('sel-fav');
+  }
+
+  // Tags (excluded / neutral)
+  function toggleTag(el) {
+    if (el.classList.contains('excluded')) {
+      el.classList.remove('excluded');
+    } else {
+      el.classList.add('excluded');
+    }
+  }
+
+  // Style single-select
+  function selectStyle(el) {
+    document.querySelectorAll('#styleTags .tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Morph single-select
+  function selectMorph(el) {
+    document.querySelectorAll('#morphTags .tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Occasions toggle
+  function toggleOcc(el) {
+    el.classList.toggle('active');
+    updateScore();
+  }
+
+  // Toggle switches
+  function toggleSwitch(el) {
+    el.classList.toggle('on');
+  }
+
+  // Boldness label
+  function updateBold(slider) {
+    // no label needed — handled by visual position
+  }
+
+  // Score update
+  function updateScore() {
+    const activeOcc = document.querySelectorAll('.occ-item.active').length;
+    const base = 68;
+    const bonus = Math.round((activeOcc / 6) * 10);
+    const total = Math.min(base + bonus, 100);
+    document.getElementById('scoreBar').style.width = total + '%';
+    document.querySelector('.score-num').innerHTML = total + '<span>%</span>';
+  }
+
+  // Save
+  function saveProfile() {
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = 'Enregistré ✓';
+    btn.classList.add('saved');
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Enregistrer';
+      btn.classList.remove('saved');
+      btn.disabled = false;
+    }, 2500);
+  }
+</script>
+
+</body>
+</html>
