@@ -1,0 +1,33 @@
+# Fichiers secrets — NE JAMAIS inclure dans une image Docker
+.env
+.env.*
+!.env.example
+
+# Dépendances locales (reconstruites dans le build)
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Fichiers de dev
+*.md
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Tests
+test/
+tests/
+__tests__/
+*.test.js
+*.spec.js
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
