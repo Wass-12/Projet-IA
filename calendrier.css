@@ -1,0 +1,719 @@
+/* ============================================================
+   IMPORT POLICES
+============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&display=swap');
+
+/* ============================================================
+   RESET MINIMAL
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ============================================================
+   VARIABLES GLOBALES
+============================================================ */
+:root {
+  --bg: #F5F2EC;
+  --surface: #FDFCFA;
+  --ink: #1C1A16;
+  --ink2: #6B6660;
+  --ink3: #A8A49F;
+  --accent: #C8572A;
+  --accent-soft: #F5E8E2;
+  --border: rgba(28,26,22,0.1);
+  --border2: rgba(28,26,22,0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --green: #2E7D52;
+  --green-soft: #E3F2E8;
+  --blue: #3B6EA5;
+  --blue-soft: #E3EDF7;
+}
+
+/* ============================================================
+   LAYOUT PAGE
+============================================================ */
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 120px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   EN-TÊTE
+============================================================ */
+header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+/* Boutons < > navigation */
+.nav-btn {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover { background: var(--bg); color: var(--ink); }
+.nav-btn:active { transform: scale(0.94); }
+
+.header-center { text-align: center; flex: 1; }
+
+/* Titre "Avril 2026" en serif italique */
+.month-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.month-sub {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink3);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   LÉGENDE
+============================================================ */
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink2);
+}
+
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.worn    { background: var(--green); }
+.legend-dot.planned { background: var(--blue); }
+.legend-dot.today   { background: var(--accent); }
+
+/* ============================================================
+   CALENDRIER
+============================================================ */
+.calendar-wrap {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* En-têtes jours de la semaine */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid var(--border2);
+  padding: 10px 0 8px;
+}
+
+.weekdays span {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink3);
+  text-transform: uppercase;
+}
+
+/* Grille des cellules */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+/* ============================================================
+   CELLULE DE JOUR
+============================================================ */
+.day-cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s;
+  gap: 3px;
+  padding: 4px 2px;
+}
+
+/* Séparateur entre cellules */
+.day-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-right: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border2);
+  pointer-events: none;
+}
+
+.day-cell:hover { background: var(--bg); }
+
+/* Jours hors du mois courant */
+.day-cell.other-month .day-num { opacity: 0.25; }
+.day-cell.other-month { pointer-events: none; }
+
+/* Numéro du jour */
+.day-num {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink2);
+  line-height: 1;
+  z-index: 1;
+}
+
+/* Aujourd'hui : cercle terracotta */
+.day-cell.is-today .day-num {
+  color: white;
+  background: var(--accent);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+
+/* Jour sélectionné : cercle encre */
+.day-cell.selected .day-num {
+  color: white;
+  background: var(--ink);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+
+/* Point indicateur sous le numéro */
+.day-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.day-cell.has-worn    .day-dot { background: var(--green); }
+.day-cell.has-planned .day-dot { background: var(--blue); }
+
+/* Mini pastilles couleur du vêtement */
+.day-preview { display: flex; gap: 2px; z-index: 1; }
+
+.day-color {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* ============================================================
+   PANNEAU JOUR (bottom sheet)
+============================================================ */
+.day-panel {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px 36px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  z-index: 50;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.day-panel.open { transform: translateY(0); }
+
+/* Poignée visuelle */
+.day-panel::before {
+  content: '';
+  display: block;
+  width: 36px; height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* Date en serif */
+.panel-date {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+}
+
+.panel-status {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--ink3);
+  margin-top: 3px;
+}
+
+/* Bouton fermer (×) */
+.close-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--ink2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.close-btn:hover { background: var(--surface); color: var(--ink); }
+
+.panel-body { margin-bottom: 14px; min-height: 80px; }
+
+/* Carte d'un vêtement dans le panneau */
+.outfit-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+.outfit-thumb {
+  width: 52px; height: 52px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.outfit-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.outfit-info { flex: 1; min-width: 0; }
+
+.outfit-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.outfit-meta { font-size: 11px; color: var(--ink2); margin-top: 3px; }
+
+/* Badge Porté / Planifié */
+.outfit-badge {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.outfit-badge.worn    { background: var(--green-soft); color: var(--green); }
+.outfit-badge.planned { background: var(--blue-soft);  color: var(--blue); }
+
+/* État vide */
+.panel-empty {
+  text-align: center;
+  padding: 20px 0;
+  color: var(--ink3);
+  font-size: 12px;
+}
+
+.panel-empty svg { opacity: 0.3; margin-bottom: 8px; }
+
+/* Boutons d'action */
+.panel-actions { display: flex; gap: 8px; }
+
+.action-btn {
+  flex: 1;
+  padding: 11px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+
+.action-btn:hover { background: var(--bg); color: var(--ink); }
+
+.action-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
+.action-btn.primary:hover { background: #2C2A26; }
+
+.action-btn.danger { color: #C45B5B; border-color: rgba(196,91,91,0.2); }
+.action-btn.danger:hover { background: #FDF0F0; }
+
+/* ============================================================
+   PICKER (overlay sélection vêtement)
+============================================================ */
+.picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28,26,22,0.5);
+  z-index: 80;
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.picker-overlay.open { opacity: 1; pointer-events: all; }
+
+.picker-card {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid var(--border);
+  padding: 20px 20px 36px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.picker-overlay.open .picker-card { transform: translateY(0); }
+
+/* Poignée */
+.picker-card::before {
+  content: '';
+  display: block;
+  width: 36px; height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+  flex-shrink: 0;
+}
+
+.picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.picker-title {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* Barre de recherche */
+.picker-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.picker-search svg { color: var(--ink3); flex-shrink: 0; }
+
+.picker-search input {
+  border: none;
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink);
+  outline: none;
+  flex: 1;
+}
+
+.picker-search input::placeholder { color: var(--ink3); }
+
+/* Filtres catégorie */
+.picker-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.picker-filters::-webkit-scrollbar { display: none; }
+
+.filter-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.filter-chip:hover { background: var(--bg); color: var(--ink); }
+.filter-chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+/* Grille picker */
+.picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 2px;
+}
+
+.picker-item {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg);
+  position: relative;
+}
+
+.picker-item:hover { border-color: var(--ink2); }
+.picker-item.selected { border-color: var(--accent); background: var(--accent-soft); }
+
+.picker-thumb {
+  aspect-ratio: 3/4;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.picker-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.picker-label {
+  padding: 5px 6px;
+  font-size: 9px;
+  color: var(--ink2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.04em;
+}
+
+/* Coche de sélection */
+.picker-check {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.picker-item.selected .picker-check { display: flex; }
+
+/* Pied du picker */
+.picker-footer { padding-top: 14px; flex-shrink: 0; }
+
+.confirm-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.confirm-btn:hover:not(:disabled) { background: #2C2A26; }
+.confirm-btn:active:not(:disabled) { transform: scale(0.98); }
+.confirm-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ============================================================
+   PANNEAU ANTI-RÉPÉTITION
+============================================================ */
+.repetition-panel {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 12px 20px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  z-index: 10;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.repetition-panel.visible { transform: translateY(0); }
+
+.rep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.rep-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--ink); }
+.rep-sub { font-size: 10px; color: var(--ink3); margin-top: 1px; }
+
+/* Badge Premium dégradé */
+.premium-badge {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #D4A843, #C8572A);
+  color: white;
+}
+
+/* Liste horizontale scrollable */
+.rep-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.rep-list::-webkit-scrollbar { display: none; }
+
+.rep-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.rep-thumb {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rep-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Badge nombre de ports (vert / orange / rouge selon fréquence) */
+.rep-count {
+  position: absolute;
+  top: -3px; right: -3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  font-size: 8px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  border: 1.5px solid var(--surface);
+}
+
+.rep-count.low  { background: var(--green); }
+.rep-count.mid  { background: #D4A843; }
+.rep-count.high { background: #C45B5B; }
+
+.rep-name {
+  font-size: 9px;
+  color: var(--ink3);
+  max-width: 48px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--ink);
+  color: white;
+  padding: 11px 18px;
+  border-radius: 30px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 8px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 100;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 360px) {
+  body { padding: 16px 10px 120px; }
+  .day-num { font-size: 11px; }
+  .picker-grid { grid-template-columns: repeat(2, 1fr); }
+}
