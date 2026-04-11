@@ -1,0 +1,116 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║           StyleSync — docker-compose.yml                     ║
+# ║    Stack complète : API + Nginx reverse proxy                ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+services:
+
+  # ── API Node.js ──────────────────────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stylesync-api
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+
+    expose:
+      - "3000"
+
+    networks:
+      - internal
+
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:size=50m,mode=1777
+
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+
+  # ── Nginx — Reverse Proxy + Site Web ─────────────────────────
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: stylesync-nginx
+    restart: unless-stopped
+
+    ports:
+      - "80:80"
+      # - "443:443"
+
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./frontend:/usr/share/nginx/html:ro   # ← Correction d’indentation
+
+    depends_on:
+      api:
+        condition: service_healthy
+
+    networks:
+      - internal
+      - external
+
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:size=50m
+      - /var/run:size=10m
+      - /tmp:size=10m
+
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETUID
+      - SETGID
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+
+# ── Réseaux ───────────────────────────────────────────────────
+networks:
+  internal:
+    internal: true
+    driver: bridge
+
+  external:
+    driver: bridge

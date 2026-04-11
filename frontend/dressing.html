@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleSync — Dressing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dressing.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Style<span>Sync</span></a>
+  <div class="nav-links">
+    <a href="index.html#dashboard">Accueil</a>
+    <a href="dressing.html" class="active">Dressing</a>
+    <a href="profil.html">Profil</a>
+    <a href="calendrier.html">Calendrier</a>
+    <a href="Ajout.html" class="btn-nav">+ Ajouter</a>
+  </div>
+</nav>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" class="search-input" placeholder="Rechercher une pièce, une couleur…" id="searchInput" oninput="filterCards()">
+      </div>
+      <div class="topbar-actions">
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grille">⊞</button>
+          <button class="view-btn" id="listBtn" onclick="setView('list')" title="Liste">≡</button>
+        </div>
+        <select class="sort-select" id="sortSelect" onchange="sortCards()">
+          <option value="recent">Récemment ajouté</option>
+          <option value="worn">Les plus portés</option>
+          <option value="unworn">Jamais portés</option>
+          <option value="alpha">A → Z</option>
+        </select>
+        <a href="Ajout.html" class="btn-add">+ Ajouter</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Catégories</div>
+      <div class="cat-item active" onclick="filterCat(this,'all')" data-cat="all">
+        <span>Tout le dressing</span><span class="cat-count">47</span>
+      </div>
+      <div class="cat-item" onclick="filterCat(this,'manteau')" data-cat="manteau">
+        <span>🧥 Manteaux & vestes</span><span class="cat-count">6</span>
+      </div>
+      <div class="cat-item" onclick="filterCat(this,'haut')" data-cat="haut">
+        <span>👔 Hauts</span><span class="cat-count">14</span>
+      </div>
+      <div class="cat-item" onclick="filterCat(this,'bas')" data-cat="bas">
+        <span>👖 Bas</span><span class="cat-count">11</span>
+      </div>
+      <div class="cat-item" onclick="filterCat(this,'chaussures')" data-cat="chaussures">
+        <span>👟 Chaussures</span><span class="cat-count">9</span>
+      </div>
+      <div class="cat-item" onclick="filterCat(this,'accessoires')" data-cat="accessoires">
+        <span>🧣 Accessoires</span><span class="cat-count">7</span>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Saison</div>
+      <div class="filter-group">
+        <div class="filter-tags">
+          <span class="ftag active" onclick="toggleFtag(this,'saison','ete')">Été</span>
+          <span class="ftag active" onclick="toggleFtag(this,'saison','automne')">Automne</span>
+          <span class="ftag active" onclick="toggleFtag(this,'saison','hiver')">Hiver</span>
+          <span class="ftag active" onclick="toggleFtag(this,'saison','printemps')">Printemps</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Couleur</div>
+      <div class="filter-group">
+        <div class="color-filters">
+          <div class="cfilter" style="background:#2a2a2c;" title="Noir" onclick="toggleColor(this)"></div>
+          <div class="cfilter active" style="background:#e0dcd4;" title="Blanc" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#8a8a8a;" title="Gris" onclick="toggleColor(this)"></div>
+          <div class="cfilter active" style="background:#c8b89a;" title="Beige" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#4a82c4;" title="Bleu" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#5aad77;" title="Vert" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#c9a96e;" title="Camel" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#8a5c3a;" title="Marron" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#c55a5a;" title="Rouge" onclick="toggleColor(this)"></div>
+          <div class="cfilter" style="background:#8b5ca6;" title="Violet" onclick="toggleColor(this)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">État</div>
+      <div class="filter-group">
+        <div class="filter-tags">
+          <span class="ftag" onclick="toggleFtag(this,'etat','neuf')">Neuf</span>
+          <span class="ftag" onclick="toggleFtag(this,'etat','bon')">Bon état</span>
+          <span class="ftag" onclick="toggleFtag(this,'etat','use')">Usé</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="alert-badge" onclick="filterFlagged()">
+      <div class="alert-dot"></div>
+      <div class="alert-text"><strong>3 pièces</strong> non portées depuis + d'un an</div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <div class="stat-num">47</div>
+        <div class="stat-lbl">pièces total</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">32</div>
+        <div class="stat-lbl">portées ce mois</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num">68<span>%</span></div>
+        <div class="stat-lbl">dressing actif</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-num" style="color:var(--red-text);">3</div>
+        <div class="stat-lbl">à désencombrer</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="switchTab(this,'all')">Tout <span class="tab-n">47</span></button>
+      <button class="cat-tab" onclick="switchTab(this,'manteau')">Manteaux <span class="tab-n">6</span></button>
+      <button class="cat-tab" onclick="switchTab(this,'haut')">Hauts <span class="tab-n">14</span></button>
+      <button class="cat-tab" onclick="switchTab(this,'bas')">Bas <span class="tab-n">11</span></button>
+      <button class="cat-tab" onclick="switchTab(this,'chaussures')">Chaussures <span class="tab-n">9</span></button>
+      <button class="cat-tab" onclick="switchTab(this,'accessoires')">Accessoires <span class="tab-n">7</span></button>
+    </div>
+
+    <!-- Results meta -->
+    <div class="results-meta">
+      <span id="resultCount">47 pièces</span>
+      <div class="active-filters" id="activeFilters"></div>
+    </div>
+
+    <!-- Grid -->
+    <div class="garment-grid" id="garmentGrid">
+
+      <div class="g-card" data-cat="manteau" data-name="Trench beige" data-color="beige" data-worn="12" data-flag="false"
+           onclick="openDetail({name:'Trench beige',cat:'Manteau',emoji:'🧥',color:'Camel',colorHex:'#c8b89a',worn:12,added:'Sept. 2023',matiere:'Coton · Polyester',taille:'38',etat:'Bon état',tags:['Mi-saison','Uni','Classique','Polyvalent']})">
+        <div class="g-thumb">🧥<div class="g-freq-badge">×12</div></div>
+        <div class="g-info">
+          <div class="g-name">Trench beige</div>
+          <div class="g-meta"><div class="g-dot" style="background:#c8b89a;"></div>Camel · Coton</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" title="Porter aujourd'hui" onclick="event.stopPropagation();wearToday('Trench beige')">▷</button>
+          <button class="g-action" title="Modifier" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" title="Retirer" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="manteau" data-name="Blazer marine" data-color="bleu" data-worn="8" data-flag="false"
+           onclick="openDetail({name:'Blazer marine',cat:'Veste',emoji:'🥼',color:'Bleu marine',colorHex:'#2a3a5c',worn:8,added:'Fév. 2024',matiere:'Laine · Polyester',taille:'38',etat:'Très bon état',tags:['Formel','Uni','Bureau','Chic']})">
+        <div class="g-thumb">🥼<div class="g-freq-badge">×8</div></div>
+        <div class="g-info">
+          <div class="g-name">Blazer marine</div>
+          <div class="g-meta"><div class="g-dot" style="background:#2a3a5c;"></div>Marine · Laine</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Blazer marine')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card flagged" data-cat="manteau" data-name="Veste velours bordeaux" data-color="rouge" data-worn="0" data-flag="true"
+           onclick="openDetail({name:'Veste velours bordeaux',cat:'Veste',emoji:'🧣',color:'Bordeaux',colorHex:'#7a2a2a',worn:0,added:'Oct. 2022',matiere:'Velours · Viscose',taille:'38',etat:'Bon état',tags:['Soirée','Velours','Bordeaux'],flag:'Non portée depuis 387 jours'})">
+        <div class="g-thumb">🧣<div class="g-flag-badge">À donner ?</div><div class="g-freq-badge">×0</div></div>
+        <div class="g-info">
+          <div class="g-name">Veste velours bord.</div>
+          <div class="g-meta"><div class="g-dot" style="background:#7a2a2a;"></div>Bordeaux · Velours</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Veste velours bordeaux')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="haut" data-name="Chemise oxford blanche" data-color="blanc" data-worn="15" data-flag="false"
+           onclick="openDetail({name:'Chemise oxford blanche',cat:'Haut',emoji:'👔',color:'Blanc',colorHex:'#e0dcd4',worn:15,added:'Jan. 2024',matiere:'Coton 100%',taille:'38',etat:'Bon état',tags:['Bureau','Uni','Classique','Oxford']})">
+        <div class="g-thumb">👔<div class="g-freq-badge">×15</div></div>
+        <div class="g-info">
+          <div class="g-name">Chemise oxford</div>
+          <div class="g-meta"><div class="g-dot" style="background:#e0dcd4;border:1px solid #555;"></div>Blanc · Coton</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Chemise oxford blanche')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="haut" data-name="Pull cachemire gris" data-color="gris" data-worn="11" data-flag="false"
+           onclick="openDetail({name:'Pull cachemire gris',cat:'Haut',emoji:'🧶',color:'Gris chiné',colorHex:'#8a8a8a',worn:11,added:'Nov. 2023',matiere:'Cachemire 100%',taille:'M',etat:'Très bon état',tags:['Casual','Confort','Doux','Hiver']})">
+        <div class="g-thumb">🧶<div class="g-freq-badge">×11</div></div>
+        <div class="g-info">
+          <div class="g-name">Pull cachemire gris</div>
+          <div class="g-meta"><div class="g-dot" style="background:#8a8a8a;"></div>Gris · Cachemire</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Pull cachemire gris')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="haut" data-name="Col roulé crème" data-color="beige" data-worn="7" data-flag="false"
+           onclick="openDetail({name:'Col roulé crème',cat:'Haut',emoji:'🫙',color:'Crème',colorHex:'#e8e0d0',worn:7,added:'Oct. 2023',matiere:'Laine mérinos',taille:'38',etat:'Bon état',tags:['Hiver','Uni','Chaud','Confort']})">
+        <div class="g-thumb">🫙<div class="g-freq-badge">×7</div></div>
+        <div class="g-info">
+          <div class="g-name">Col roulé crème</div>
+          <div class="g-meta"><div class="g-dot" style="background:#e8e0d0;border:1px solid #555;"></div>Crème · Mérinos</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Col roulé crème')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="bas" data-name="Chino marine" data-color="bleu" data-worn="18" data-flag="false"
+           onclick="openDetail({name:'Chino marine',cat:'Bas',emoji:'👖',color:'Marine',colorHex:'#2a3a5c',worn:18,added:'Août 2023',matiere:'Coton · Élasthanne',taille:'38',etat:'Bon état',tags:['Bureau','Casual','Uni','Polyvalent']})">
+        <div class="g-thumb">👖<div class="g-freq-badge">×18</div></div>
+        <div class="g-info">
+          <div class="g-name">Chino marine</div>
+          <div class="g-meta"><div class="g-dot" style="background:#2a3a5c;"></div>Marine · Coton</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Chino marine')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="bas" data-name="Jean slim noir" data-color="noir" data-worn="9" data-flag="false"
+           onclick="openDetail({name:'Jean slim noir',cat:'Bas',emoji:'🩲',color:'Noir',colorHex:'#2a2a2c',worn:9,added:'Mars 2024',matiere:'Denim · Élasthanne',taille:'38',etat:'Très bon état',tags:['Casual','Denim','Slim','Polyvalent']})">
+        <div class="g-thumb">🩲<div class="g-freq-badge">×9</div></div>
+        <div class="g-info">
+          <div class="g-name">Jean slim noir</div>
+          <div class="g-meta"><div class="g-dot" style="background:#2a2a2c;border:1px solid #555;"></div>Noir · Denim</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Jean slim noir')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card flagged" data-cat="bas" data-name="Jupe plissée écossaise" data-color="rouge" data-worn="1" data-flag="true"
+           onclick="openDetail({name:'Jupe plissée écossaise',cat:'Bas',emoji:'👗',color:'Écossais',colorHex:'#8a3a3a',worn:1,added:'Déc. 2021',matiere:'Laine · Polyester',taille:'38',etat:'Bon état',tags:['Soirée','Motif','Écossais'],flag:'Portée 1 fois en 3 ans'})">
+        <div class="g-thumb">👗<div class="g-flag-badge">À donner ?</div><div class="g-freq-badge">×1</div></div>
+        <div class="g-info">
+          <div class="g-name">Jupe plissée écos.</div>
+          <div class="g-meta"><div class="g-dot" style="background:#8a3a3a;"></div>Écossais · Laine</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Jupe plissée écossaise')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="chaussures" data-name="Derby cognac" data-color="marron" data-worn="10" data-flag="false"
+           onclick="openDetail({name:'Derby cognac',cat:'Chaussures',emoji:'👞',color:'Cognac',colorHex:'#8a5c3a',worn:10,added:'Oct. 2023',matiere:'Cuir pleine fleur',taille:'39',etat:'Bon état',tags:['Bureau','Cuir','Classique','Dressé']})">
+        <div class="g-thumb">👞<div class="g-freq-badge">×10</div></div>
+        <div class="g-info">
+          <div class="g-name">Derby cognac</div>
+          <div class="g-meta"><div class="g-dot" style="background:#8a5c3a;"></div>Cognac · Cuir</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Derby cognac')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="chaussures" data-name="Sneakers blanches" data-color="blanc" data-worn="14" data-flag="false"
+           onclick="openDetail({name:'Sneakers blanches',cat:'Chaussures',emoji:'👟',color:'Blanc',colorHex:'#e0dcd4',worn:14,added:'Avr. 2024',matiere:'Cuir synthétique',taille:'39',etat:'Bon état',tags:['Casual','Blanc','Minimaliste','Sport']})">
+        <div class="g-thumb">👟<div class="g-freq-badge">×14</div></div>
+        <div class="g-info">
+          <div class="g-name">Sneakers blanches</div>
+          <div class="g-meta"><div class="g-dot" style="background:#e0dcd4;border:1px solid #555;"></div>Blanc · Synthétique</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Sneakers blanches')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card flagged" data-cat="chaussures" data-name="Escarpins dorés" data-color="beige" data-worn="2" data-flag="true"
+           onclick="openDetail({name:'Escarpins dorés',cat:'Chaussures',emoji:'👠',color:'Doré',colorHex:'#c9a96e',worn:2,added:'Juin 2022',matiere:'Cuir verni',taille:'39',etat:'Usé',tags:['Soirée','Formel','Doré'],flag:'Portés 2 fois, état usé'})">
+        <div class="g-thumb">👠<div class="g-flag-badge">À donner ?</div><div class="g-freq-badge">×2</div></div>
+        <div class="g-info">
+          <div class="g-name">Escarpins dorés</div>
+          <div class="g-meta"><div class="g-dot" style="background:#c9a96e;"></div>Doré · Verni</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Escarpins dorés')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="accessoires" data-name="Écharpe en laine" data-color="beige" data-worn="6" data-flag="false"
+           onclick="openDetail({name:'Écharpe en laine',cat:'Accessoire',emoji:'🧣',color:'Camel',colorHex:'#c8b89a',worn:6,added:'Nov. 2023',matiere:'Laine mérinos',taille:'Unique',etat:'Bon état',tags:['Hiver','Camel','Chaud','Confort']})">
+        <div class="g-thumb">🧣<div class="g-freq-badge">×6</div></div>
+        <div class="g-info">
+          <div class="g-name">Écharpe en laine</div>
+          <div class="g-meta"><div class="g-dot" style="background:#c8b89a;"></div>Camel · Laine</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Écharpe en laine')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <div class="g-card" data-cat="accessoires" data-name="Sac en cuir fauve" data-color="marron" data-worn="20" data-flag="false"
+           onclick="openDetail({name:'Sac en cuir fauve',cat:'Accessoire',emoji:'👜',color:'Fauve',colorHex:'#a06030',worn:20,added:'Juil. 2023',matiere:'Cuir pleine fleur',taille:'Moyen',etat:'Bon état',tags:['Bureau','Cuir','Polyvalent','Structuré']})">
+        <div class="g-thumb">👜<div class="g-freq-badge">×20</div></div>
+        <div class="g-info">
+          <div class="g-name">Sac en cuir fauve</div>
+          <div class="g-meta"><div class="g-dot" style="background:#a06030;"></div>Fauve · Cuir</div>
+        </div>
+        <div class="g-actions">
+          <button class="g-action" onclick="event.stopPropagation();wearToday('Sac en cuir fauve')">▷</button>
+          <button class="g-action" onclick="event.stopPropagation()">✎</button>
+          <button class="g-action warn" onclick="event.stopPropagation()">⊖</button>
+        </div>
+      </div>
+
+      <!-- Empty state (hidden by default) -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">👗</div>
+        <div class="empty-title">Aucune pièce trouvée</div>
+        <div class="empty-sub">Essayez d'ajuster vos filtres ou votre recherche.</div>
+      </div>
+
+    </div><!-- end grid -->
+
+    <!-- Toast -->
+    <div id="toast" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:12px 20px;font-size:13px;color:var(--text);opacity:0;transition:all 0.3s;pointer-events:none;z-index:500;white-space:nowrap;"></div>
+
+  </main>
+
+</div><!-- end shell -->
+
+<!-- DETAIL PANEL -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetailOutside(event)">
+  <div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+      <span class="detail-title-label">Détail de la pièce</span>
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-thumb" id="detailThumb">👗</div>
+    <div class="detail-body">
+      <div class="detail-name" id="detailName">—</div>
+      <div class="detail-sub" id="detailSub">—</div>
+      <div id="detailFlag" style="display:none;margin-bottom:16px;padding:8px 12px;background:var(--red-dim);border:1px solid var(--red-border);border-radius:3px;font-size:12px;color:var(--red-text);"></div>
+      <div id="detailRows"></div>
+      <div class="detail-tags" id="detailTags"></div>
+      <div class="detail-wear-history">
+        <div class="detail-wear-title">Historique de port — 12 derniers mois</div>
+        <div class="wear-bar" id="wearBar"></div>
+        <div class="wear-months">
+          <span>Avr</span><span>Mai</span><span>Juin</span><span>Juil</span><span>Août</span>
+          <span>Sep</span><span>Oct</span><span>Nov</span><span>Déc</span><span>Jan</span>
+          <span>Fév</span><span>Mar</span>
+        </div>
+      </div>
+      <div class="detail-actions" id="detailActions"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

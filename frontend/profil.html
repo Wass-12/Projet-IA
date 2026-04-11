@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleSync — Profil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="profil.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Style<span>Sync</span></a>
+  <div class="nav-links">
+    <a href="index.html#dashboard">Accueil</a>
+    <a href="index.html#features">Dressing</a>
+    <a href="#" class="active">Profil</a>
+    <a href="calendrier.html">Calendrier</a>
+    <a href="Ajout.html" class="btn-nav">Ajouter</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- En-tête -->
+  <p class="page-eyebrow">Configuration · IA</p>
+  <h1 class="page-title">Votre <em>profil</em></h1>
+  <p class="page-desc">Plus vos préférences sont précises — sensibilité thermique, couleurs évitées, occasions habituelles — plus les suggestions de l'accueil seront justes. Ce panneau est le cœur de votre expérience.</p>
+
+  <!-- Statut de complétion -->
+  <div class="profile-status">
+    <div class="profile-avatar">S</div>
+    <div class="profile-meta">
+      <div class="profile-name">Sophie Laurent</div>
+      <div class="profile-sub">Membre depuis mars 2024 · 47 vêtements</div>
+    </div>
+    <div class="profile-score">
+      <div class="score-num">68<span>%</span></div>
+      <div class="score-label">Profil complété</div>
+      <div class="score-bar"><div class="score-bar-fill" id="scoreBar"></div></div>
+    </div>
+  </div>
+
+  <div id="sections-wrap">
+
+    <!-- ── 1. CONFORT THERMIQUE ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Confort thermique</span>
+        <span class="section-impact high">Impact direct sur les suggestions</span>
+      </div>
+      <div class="card">
+        <div class="thermal-row">
+          <div class="field-icon">🌡</div>
+          <div class="field-text">
+            <div class="field-name">Sensibilité au froid</div>
+            <div class="field-hint">Ajuste le seuil à partir duquel une couche est suggérée</div>
+          </div>
+          <div class="thermal-btns" id="cold">
+            <button class="thermal-btn" data-g="cold" data-v="frileux" onclick="setTherm(this)">Frileux</button>
+            <button class="thermal-btn active" data-g="cold" data-v="normal" onclick="setTherm(this)">Normal</button>
+            <button class="thermal-btn" data-g="cold" data-v="resistant" onclick="setTherm(this)">Résistant</button>
+          </div>
+        </div>
+        <div class="thermal-row">
+          <div class="field-icon">☀️</div>
+          <div class="field-text">
+            <div class="field-name">Tolérance à la chaleur</div>
+            <div class="field-hint">Influence le choix des matières et coupes légères</div>
+          </div>
+          <div class="thermal-btns" id="heat">
+            <button class="thermal-btn" data-g="heat" data-v="sensible" onclick="setTherm(this)">Sensible</button>
+            <button class="thermal-btn active" data-g="heat" data-v="normal" onclick="setTherm(this)">Normal</button>
+            <button class="thermal-btn" data-g="heat" data-v="ok" onclick="setTherm(this)">Très ok</button>
+          </div>
+        </div>
+        <div class="slider-row">
+          <div class="field-icon">💧</div>
+          <div class="field-text">
+            <div class="field-name">Tolérance à la pluie</div>
+            <div class="field-hint">Détermine à quel seuil un imperméable est conseillé</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="10" max="90" value="40" step="10" id="rainSlider" oninput="document.getElementById('rainVal').textContent=this.value+'%'">
+            <span class="slider-val" id="rainVal">40%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 2. COULEURS ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Palette personnelle</span>
+        <span class="section-impact high">Filtrage actif des suggestions</span>
+      </div>
+      <div class="card">
+        <div class="color-row">
+          <div class="field-icon">✕</div>
+          <div class="field-text">
+            <div class="field-name">Couleurs à éviter</div>
+            <div class="field-hint">Jamais proposées dans les tenues — cliquez pour exclure</div>
+          </div>
+          <div class="color-dots" id="avoidDots">
+            <div class="cdot" style="background:#c55a5a;" title="Rouge" onclick="toggleAvoid(this)"></div>
+            <div class="cdot sel-avoid" style="background:#e07c3a;" title="Orange" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#d4a843;" title="Jaune" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#5aad77;" title="Vert" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#4a82c4;" title="Bleu vif" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#8b5ca6;" title="Violet" onclick="toggleAvoid(this)"></div>
+            <div class="cdot sel-avoid" style="background:#c97070;" title="Rose" onclick="toggleAvoid(this)"></div>
+            <div class="cdot" style="background:#7a5c42;" title="Marron" onclick="toggleAvoid(this)"></div>
+            <div class="cdot-add" title="Autre">+</div>
+          </div>
+        </div>
+        <div class="color-row">
+          <div class="field-icon">♡</div>
+          <div class="field-text">
+            <div class="field-name">Couleurs préférées</div>
+            <div class="field-hint">Mises en avant dans les assemblages suggérés</div>
+          </div>
+          <div class="color-dots" id="favDots">
+            <div class="cdot sel-fav" style="background:#c8b89a;" title="Beige" onclick="toggleFav(this)"></div>
+            <div class="cdot sel-fav" style="background:#2a2a2c;" title="Noir" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#a0b4c8;" title="Bleu ciel" onclick="toggleFav(this)"></div>
+            <div class="cdot sel-fav" style="background:#8fa882;" title="Vert sauge" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#c4a882;" title="Camel" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#e0dcd4;" title="Blanc cassé" onclick="toggleFav(this)"></div>
+            <div class="cdot" style="background:#7a8c8a;" title="Gris ardoise" onclick="toggleFav(this)"></div>
+            <div class="cdot-add" title="Autre">+</div>
+          </div>
+        </div>
+        <div class="color-row" style="border-bottom: none;">
+          <div class="field-icon">⊟</div>
+          <div class="field-text">
+            <div class="field-name">Matières à éviter</div>
+            <div class="field-hint">Filtre les vêtements avec ces compositions</div>
+          </div>
+          <div class="tag-group" id="matiereTags">
+            <span class="tag excluded" onclick="toggleTag(this)">Laine</span>
+            <span class="tag excluded" onclick="toggleTag(this)">Acrylique</span>
+            <span class="tag" onclick="toggleTag(this)">Polyester</span>
+            <span class="tag" onclick="toggleTag(this)">Cuir</span>
+            <span class="tag" onclick="toggleTag(this)">Denim</span>
+            <span class="tag" onclick="toggleTag(this)">Velours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 3. STYLE ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Style vestimentaire</span>
+        <span class="section-impact">Priorité dans les assemblages</span>
+      </div>
+      <div class="card">
+        <div class="field-row" style="cursor:default;" onclick="void(0)">
+          <div class="field-icon">◈</div>
+          <div class="field-text">
+            <div class="field-name">Style principal</div>
+            <div class="field-hint">Détermine l'orientation des suggestions quotidiennes</div>
+          </div>
+          <div class="tag-group" id="styleTags">
+            <span class="tag active" onclick="selectStyle(this)">Minimaliste</span>
+            <span class="tag" onclick="selectStyle(this)">Casual</span>
+            <span class="tag" onclick="selectStyle(this)">Chic</span>
+            <span class="tag" onclick="selectStyle(this)">Sportswear</span>
+            <span class="tag" onclick="selectStyle(this)">Classique</span>
+          </div>
+        </div>
+        <div class="field-row" style="cursor:default;">
+          <div class="field-icon">◉</div>
+          <div class="field-text">
+            <div class="field-name">Morphologie</div>
+            <div class="field-hint">Optimise les coupes suggérées pour votre silhouette</div>
+          </div>
+          <div class="tag-group" id="morphTags">
+            <span class="tag" onclick="selectMorph(this)">Sablier</span>
+            <span class="tag active" onclick="selectMorph(this)">Rectangle</span>
+            <span class="tag" onclick="selectMorph(this)">Trapèze</span>
+            <span class="tag" onclick="selectMorph(this)">Ovale</span>
+          </div>
+        </div>
+        <div class="slider-row">
+          <div class="field-icon">⚖️</div>
+          <div class="field-text">
+            <div class="field-name">Audace stylistique</div>
+            <div class="field-hint">Dose l'originalité des suggestions par rapport au classique</div>
+          </div>
+          <div class="slider-wrap">
+            <span style="font-size:11px;color:var(--text3);white-space:nowrap;">Classique</span>
+            <input type="range" min="0" max="100" value="30" step="10" id="boldSlider" oninput="updateBold(this)">
+            <span style="font-size:11px;color:var(--text3);white-space:nowrap;">Audacieux</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 4. OCCASIONS ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Occasions habituelles</span>
+        <span class="section-impact">Contextes priorisés</span>
+      </div>
+      <div class="card">
+        <div class="occ-grid">
+          <div class="occ-item active" onclick="toggleOcc(this)">
+            <span class="occ-icon">💼</span>
+            <span class="occ-label">Travail bureau</span>
+          </div>
+          <div class="occ-item active" onclick="toggleOcc(this)">
+            <span class="occ-icon">🍽</span>
+            <span class="occ-label">Dîner / Soirée</span>
+          </div>
+          <div class="occ-item" onclick="toggleOcc(this)">
+            <span class="occ-icon">🏃</span>
+            <span class="occ-label">Sport / Loisirs</span>
+          </div>
+          <div class="occ-item active" onclick="toggleOcc(this)">
+            <span class="occ-icon">☕</span>
+            <span class="occ-label">Week-end casual</span>
+          </div>
+          <div class="occ-item" onclick="toggleOcc(this)">
+            <span class="occ-icon">✈️</span>
+            <span class="occ-label">Voyage</span>
+          </div>
+          <div class="occ-item" onclick="toggleOcc(this)">
+            <span class="occ-icon">🎉</span>
+            <span class="occ-label">Événements formels</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 5. PRÉFÉRENCES IA ── -->
+    <div class="section-block">
+      <div class="section-header">
+        <span class="section-label">Préférences de l'IA</span>
+        <span class="section-impact">Comportement des suggestions</span>
+      </div>
+      <div class="card">
+        <div class="toggle-row">
+          <div class="field-icon">↺</div>
+          <div class="field-text">
+            <div class="field-name">Valoriser la garde-robe existante</div>
+            <div class="field-hint">Priorise les pièces déjà dans votre dressing</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">✦</div>
+          <div class="field-text">
+            <div class="field-name">Intégrer les tendances saisonnières</div>
+            <div class="field-hint">Modèle mis à jour chaque mois selon la mode actuelle</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">🌿</div>
+          <div class="field-text">
+            <div class="field-name">Filtres durabilité</div>
+            <div class="field-hint">Met en avant les pièces les plus portées et polyvalentes</div>
+          </div>
+          <div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">🔁</div>
+          <div class="field-text">
+            <div class="field-name">Anti-répétition 48h</div>
+            <div class="field-hint">Évite de proposer deux fois la même tenue sur deux jours consécutifs</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row">
+          <div class="field-icon">📅</div>
+          <div class="field-text">
+            <div class="field-name">Lecture de l'agenda</div>
+            <div class="field-hint">Adapte les suggestions au contexte de vos événements du jour</div>
+          </div>
+          <div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+
+      <div class="impact-note" style="margin-top:16px;">
+        <div class="impact-dot"></div>
+        <div class="impact-text">
+          Votre profil est complété à <strong>68 %</strong>. Renseigner le <strong>budget moyen par pièce</strong> et les <strong>événements formels</strong> améliorerait notablement la précision des suggestions matinales.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end sections-wrap -->
+
+  <!-- Save -->
+  <div class="save-wrap">
+    <span class="save-hint">Modifications sauvegardées automatiquement</span>
+    <button class="btn-save" id="saveBtn" onclick="saveProfile()">Enregistrer</button>
+  </div>
+
+</div><!-- end page-wrap -->
+</body>
+</html>
