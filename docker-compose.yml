@@ -96,3 +96,4 @@ networks:
 
 volumes:
   certbot_www:
+#  HTTPS valide → le cert est auto-signé, le navigateur affichera un avertissement — clique "Avancer quand même" pour les tests

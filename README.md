@@ -1,7 +1,7 @@
 # StyleSync
 
 > Application web de gestion intelligente de garde-robe — BTS SIO SISR · EPSI Montpellier · Avril 2026
-
+> HTTPS valide → le cert est auto-signé, le navigateur affichera un avertissement — clique "Avancer quand même" pour les tests
 ## Démarrage rapide
 
 ```bash

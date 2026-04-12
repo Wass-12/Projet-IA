@@ -8,7 +8,7 @@ import { loadEnv } from "./config/env.js"
 loadEnv()
 
 const app = express()
-
+app.set('trust proxy', 1)
 app.use(helmet())
 
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")

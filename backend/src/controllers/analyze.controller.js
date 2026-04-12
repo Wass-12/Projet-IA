@@ -25,7 +25,21 @@ function validateImage(img) {
 
 export const analyzeGarment = async (req, res, next) => {
   try {
-    if (!anthropic) return res.status(503).json({ error: "ANTHROPIC_API_KEY manquante dans .env" })
+    // ── Mock IA (si pas de clé Anthropic) ────────────────────
+    if (!anthropic) {
+      return res.json({
+        type:       "T-shirt",
+        brand:      "Mock Brand",
+        size:       "M",
+        material:   "Coton",
+        season:     "Toutes saisons",
+        colors:     ["#ffffff", "#000000"],
+        confidence: 90,
+        occasions:  ["Casual", "Sport"],
+        notes:      "Résultat de test — clé Anthropic manquante",
+      })
+    }
+    // ────────────────────────────────────────────────────────
 
     const { image, hint } = req.body
     if (!image && !hint) return res.status(400).json({ error: "Fournir 'image' (base64) ou 'hint' (texte)" })
@@ -42,12 +56,11 @@ export const analyzeGarment = async (req, res, next) => {
     let finalImage = image
     if (isImg && process.env.REMOVEBG_API_KEY) {
       try {
-        const buffer     = Buffer.from(image.split(",")[1], "base64")
-        const cleanBuf   = await removeBackground(buffer)
-        finalImage       = `data:image/png;base64,${cleanBuf.toString("base64")}`
+        const buffer   = Buffer.from(image.split(",")[1], "base64")
+        const cleanBuf = await removeBackground(buffer)
+        finalImage     = `data:image/png;base64,${cleanBuf.toString("base64")}`
       } catch (e) {
         console.warn("Remove.bg échoué, image originale utilisée :", e.message)
-        // Non bloquant — on continue avec l'image originale
       }
     }
     // ────────────────────────────────────────────────────────
@@ -85,19 +98,3 @@ Types : T-shirt, Chemise, Pull, Veste, Manteau, Pantalon, Jean, Short, Robe, Jup
     } catch { return res.status(502).json({ error: "Réponse IA invalide" }) }
   } catch (err) { next(err) }
 }
-//zone a supprimé (quand il y aura une clé API claude )
-// ── Mock IA (si pas de clé Anthropic) ────────────────────
-if (!anthropic) {
-  return res.json({
-    type: "T-shirt",
-    brand: "Mock Brand",
-    size: "M",
-    material: "Coton",
-    season: "Toutes saisons",
-    colors: ["#ffffff", "#000000"],
-    confidence: 90,
-    occasions: ["Casual", "Sport"],
-    notes: "Résultat de test — clé Anthropic manquante",
-  })
-}
-// ────────────────────────────────────────────────────────
