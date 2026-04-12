@@ -1,5 +1,2 @@
 import dotenv from "dotenv"
-
-export const loadEnv = () => {
-  dotenv.config()
-}
+export const loadEnv = () => dotenv.config()

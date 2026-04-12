@@ -90,7 +90,12 @@ function buildTags(row, tags) {
 function addTagEl(row, text, inputEl) {
   const tag = document.createElement('div');
   tag.className = 'tag';
-  tag.innerHTML = `${text}<span class="remove" onclick="this.parentElement.remove()">×</span>`;
+  tag.textContent = text;
+  const rm = document.createElement('span');
+  rm.className = 'remove';
+  rm.textContent = '×';
+  rm.onclick = () => tag.remove();
+  tag.appendChild(rm);
   row.insertBefore(tag, inputEl);
 }
 
@@ -176,41 +181,22 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 async function analyzeWithAI(imageBase64OrHint) {
   const isBase64 = imageBase64OrHint && imageBase64OrHint.startsWith('data:image');
 
-  // Prompt différent selon qu'on envoie une image ou un hint texte
-  const prompt = isBase64
-    ? `Analyse cette photo de vêtement et retourne UNIQUEMENT un JSON avec ces champs exacts (pas de markdown, pas d'explication) :
-{"type":"string","brand":"string ou vide","size":"string ou vide","material":"string","season":"string parmi Printemps|Été|Automne|Hiver|Toutes saisons","colors":["#hex"],"confidence":number 80-99,"occasions":["string"],"notes":"string ou vide"}
-Pour type utilise: T-shirt, Chemise, Pull, Veste, Manteau, Pantalon, Jean, Short, Robe, Jupe, Costume, Chaussures, Accessoire ou Autre.`
-    : `Génère un exemple réaliste de vêtement (${imageBase64OrHint || 'aléatoire'}) et retourne UNIQUEMENT un JSON avec ces champs (pas de markdown) :
-{"type":"string","brand":"string","size":"string","material":"string","season":"string parmi Printemps|Été|Automne|Hiver|Toutes saisons","colors":["#hex"],"confidence":number 85-97,"occasions":["string"],"notes":"string"}`;
+  // Appel via le backend — la clé Anthropic ne touche jamais le navigateur
+  const payload = isBase64
+    ? { image: imageBase64OrHint }
+    : { hint: imageBase64OrHint || 'aléatoire' };
 
-  const body = {
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1000,
-    messages: [{
-      role: 'user',
-      content: isBase64
-        // Message multimodal : image + texte
-        ? [
-            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64OrHint.split(',')[1] } },
-            { type: 'text', text: prompt }
-          ]
-        // Message texte seul
-        : [{ type: 'text', text: prompt }]
-    }]
-  };
-
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch('/api/analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
+    body: JSON.stringify(payload),
   });
 
-  const data = await resp.json();
-  const text  = data.content?.[0]?.text || '{}';
-  // Nettoie d'éventuels blocs ```json ``` avant de parser
-  const clean = text.replace(/```json|```/g, '').trim();
-  return JSON.parse(clean);
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error || `Erreur serveur (${resp.status})`);
+  }
+  return resp.json();
 }
 
 /* ============================================================
@@ -464,16 +450,15 @@ function renderWardrobe() {
     el.className = 'wardrobe-item';
     const emoji  = emojiMap[item.type] || '👔';
 
-    el.innerHTML = `
-      <div class="item-thumb">
-        ${item.img
-          ? `<img src="${item.img}" alt="">`
-          : `<div class="item-thumb-placeholder">${emoji}</div>`}
-      </div>
-      <div class="item-info">
-        <div class="item-name">${item.brand || item.type}</div>
-        <div class="item-sub">${item.type}${item.size ? ' · ' + item.size : ''}</div>
-      </div>`;
+    const thumb = document.createElement('div'); thumb.className = 'item-thumb';
+    const src = safeSrc(item.img);
+    if (src) { const ig = document.createElement('img'); ig.src = src; ig.alt = ''; thumb.appendChild(ig); }
+    else { const ph = document.createElement('div'); ph.className = 'item-thumb-placeholder'; ph.textContent = emoji; thumb.appendChild(ph); }
+    const info = document.createElement('div'); info.className = 'item-info';
+    const nm = document.createElement('div'); nm.className = 'item-name'; nm.textContent = item.brand || item.type || '';
+    const sb = document.createElement('div'); sb.className = 'item-sub'; sb.textContent = item.type + (item.size ? ' � ' + item.size : '');
+    info.appendChild(nm); info.appendChild(sb);
+    el.appendChild(thumb); el.appendChild(info);
 
     grid.appendChild(el);
   });

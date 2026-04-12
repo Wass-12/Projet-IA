@@ -1,6 +1,6 @@
-import { UserModel } from "../models/user.model.js"
-
 export const getUsers = (req, res) => {
-  const users = UserModel.getAll()
-  res.json(users)
+  res.json([
+    { id: 1, name: "Alice" },
+    { id: 2, name: "Bob" },
+  ])
 }

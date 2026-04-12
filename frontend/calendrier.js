@@ -213,31 +213,32 @@ function renderPanel(key, entry, past, isToday) {
     const garment = wardrobe.find(w => w.id === entry.garmentId);
     status.textContent = entry.mode === 'worn' ? 'Tenue portée' : 'Tenue planifiée';
 
-    body.innerHTML = `
-      <div class="outfit-card">
-        <div class="outfit-thumb">
-          ${garment?.img ? `<img src="${garment.img}" alt="">` : `<span>${garment?.emoji || '👔'}</span>`}
-        </div>
-        <div class="outfit-info">
-          <div class="outfit-name">${garment?.brand || garment?.type || 'Vêtement'}</div>
-          <div class="outfit-meta">${garment?.type || ''}${garment?.size ? ' · ' + garment.size : ''}</div>
-        </div>
-        <span class="outfit-badge ${entry.mode}">${entry.mode === 'worn' ? 'Porté' : 'Planifié'}</span>
-      </div>`;
+    body.innerHTML = '';
+    const card = document.createElement('div'); card.className = 'outfit-card';
+    const tDiv = document.createElement('div'); tDiv.className = 'outfit-thumb';
+    const tSrc = safeSrc(garment?.img);
+    if (tSrc) { const ti = document.createElement('img'); ti.src = tSrc; ti.alt = ''; tDiv.appendChild(ti); }
+    else { const ts = document.createElement('span'); ts.textContent = garment?.emoji || '👔'; tDiv.appendChild(ts); }
+    const oi = document.createElement('div'); oi.className = 'outfit-info';
+    const on_ = document.createElement('div'); on_.className = 'outfit-name';
+    on_.textContent = garment?.brand || garment?.type || 'Vêtement';
+    const om = document.createElement('div'); om.className = 'outfit-meta';
+    om.textContent = (garment?.type || '') + (garment?.size ? ' · ' + garment.size : '');
+    oi.appendChild(on_); oi.appendChild(om);
+    const badge = document.createElement('span');
+    badge.className = 'outfit-badge ' + esc(entry.mode);
+    badge.textContent = entry.mode === 'worn' ? 'Porté' : 'Planifié';
+    card.appendChild(tDiv); card.appendChild(oi); card.appendChild(badge);
+    body.appendChild(card);
 
-    actions.innerHTML = `
-      <button class="action-btn" onclick="openPicker('${key}', '${entry.mode}')">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <path d="M2 9.5V11h1.5l5-5L7 4.5l-5 5zM10.7 3.8a.9.9 0 000-1.3l-1.2-1.2a.9.9 0 00-1.3 0L7 2.5l2.5 2.5 1.2-1.2z" fill="currentColor"/>
-        </svg>
-        Changer
-      </button>
-      <button class="action-btn danger" onclick="removeEntry('${key}')">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <path d="M2 3.5h9M5 3.5V2.5h3v1M5.5 5.5v4M7.5 5.5v4M3 3.5l.5 7h6l.5-7" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
-        </svg>
-        Supprimer
-      </button>`;
+    actions.innerHTML = '';
+    const btnCh = document.createElement('button'); btnCh.className = 'action-btn';
+    btnCh.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 9.5V11h1.5l5-5L7 4.5l-5 5zM10.7 3.8a.9.9 0 000-1.3l-1.2-1.2a.9.9 0 00-1.3 0L7 2.5l2.5 2.5 1.2-1.2z" fill="currentColor"/></svg> Changer';
+    btnCh.addEventListener('click', () => openPicker(key, entry.mode));
+    const btnDel = document.createElement('button'); btnDel.className = 'action-btn danger';
+    btnDel.innerHTML = '<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M5 3.5V2.5h3v1M5.5 5.5v4M7.5 5.5v4M3 3.5l.5 7h6l.5-7" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg> Supprimer';
+    btnDel.addEventListener('click', () => removeEntry(key));
+    actions.appendChild(btnCh); actions.appendChild(btnDel);
 
   } else if (past || isToday) {
     /* Passé ou aujourd'hui : enregistrer ce qui a été porté */
@@ -373,16 +374,15 @@ function renderPickerGrid(query = '') {
   filtered.forEach(item => {
     const div = document.createElement('div');
     div.className = 'picker-item' + (item.id === pickerSelected ? ' selected' : '');
-    div.innerHTML = `
-      <div class="picker-thumb">
-        ${item.img ? `<img src="${item.img}" alt="">` : `<span>${item.emoji || getEmoji(item.type)}</span>`}
-      </div>
-      <div class="picker-label">${item.brand || item.type}</div>
-      <div class="picker-check">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M2 5l2.5 2.5 3.5-4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-      </div>`;
+    const pt = document.createElement('div'); pt.className = 'picker-thumb';
+    const psrc = safeSrc(item.img);
+    if (psrc) { const pi = document.createElement('img'); pi.src = psrc; pi.alt = ''; pt.appendChild(pi); }
+    else { const ps = document.createElement('span'); ps.textContent = item.emoji || getEmoji(item.type); pt.appendChild(ps); }
+    const pl = document.createElement('div'); pl.className = 'picker-label';
+    pl.textContent = item.brand || item.type || '';
+    const pc = document.createElement('div'); pc.className = 'picker-check';
+    pc.innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>';
+    div.appendChild(pt); div.appendChild(pl); div.appendChild(pc);
 
     div.onclick = () => {
       pickerSelected = item.id;
@@ -460,12 +460,15 @@ function renderRepetitionPanel() {
 
     const item = document.createElement('div');
     item.className = 'rep-item';
-    item.innerHTML = `
-      <div class="rep-thumb">
-        ${garment.img ? `<img src="${garment.img}" alt="">` : garment.emoji}
-        <span class="rep-count ${level}">${count}</span>
-      </div>
-      <div class="rep-name">${garment.brand || garment.type}</div>`;
+    const rt = document.createElement('div'); rt.className = 'rep-thumb';
+    const rsrc = safeSrc(garment.img);
+    if (rsrc) { const ri = document.createElement('img'); ri.src = rsrc; ri.alt = ''; rt.appendChild(ri); }
+    else { rt.appendChild(document.createTextNode(garment.emoji || '')); }
+    const rc = document.createElement('span'); rc.className = 'rep-count ' + level;
+    rc.textContent = count; rt.appendChild(rc);
+    const rn = document.createElement('div'); rn.className = 'rep-name';
+    rn.textContent = garment.brand || garment.type || '';
+    item.appendChild(rt); item.appendChild(rn);
     list.appendChild(item);
   });
 }

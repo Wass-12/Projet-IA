@@ -1,0 +1,16 @@
+.env
+*.env
+.env.*
+!.env.example
+node_modules/
+**/node_modules/
+*.tar.gz
+*.tgz
+dist/
+build/
+*Zone.Identifier
+Thumbs.db
+.DS_Store
+.vscode/
+*.log
+npm-debug.log*

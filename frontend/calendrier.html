@@ -1,29 +1,96 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StyleSync — Calendrier</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="calendrier.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StyleSync — Calendrier</title>
+  <link rel="stylesheet" href="calendrier.css">
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo">Style<span>Sync</span></a>
-  <div class="nav-links">
-    <a href="index.html#dashboard">Accueil</a>
-    <a href="dressing.html">Dressing</a>
-    <a href="profil.html">Profil</a>
-    <a href="calendrier.html" class="active">Calendrier</a>
-    <a href="Ajout.html" class="btn-nav">+ Ajouter</a>
+  <!-- ── En-tête navigation mois ─────────────────────────── -->
+  <header>
+    <button class="nav-btn" onclick="prevMonth()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="header-center">
+      <div class="month-title" id="monthTitle">Avril 2026</div>
+      <div class="month-sub"  id="monthSub">0 tenues ce mois</div>
+    </div>
+    <button class="nav-btn" onclick="nextMonth()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ── Légende ─────────────────────────────────────────── -->
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot worn"></span>Porté</div>
+    <div class="legend-item"><span class="legend-dot planned"></span>Planifié</div>
+    <div class="legend-item"><span class="legend-dot today"></span>Aujourd'hui</div>
   </div>
-</nav>
 
-<div id="app"></div>
+  <!-- ── Grille calendrier ──────────────────────────────── -->
+  <div class="calendar-grid" id="calendarGrid"></div>
 
-<script src="calendrier.js"></script>
+  <!-- ── Panneau jour (bottom sheet) ───────────────────── -->
+  <div class="day-panel" id="dayPanel">
+    <div class="panel-handle"></div>
+    <div class="panel-header">
+      <span class="panel-date"   id="panelDate"></span>
+      <span class="panel-status" id="panelStatus"></span>
+    </div>
+    <div class="panel-body"    id="panelBody"></div>
+    <div class="panel-actions" id="panelActions"></div>
+    <button class="panel-close" onclick="closePanel()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Picker vêtement (overlay) ─────────────────────── -->
+  <div class="picker-overlay" id="pickerOverlay">
+    <div class="picker-sheet">
+      <div class="picker-header">
+        <h3 class="picker-title" id="pickerTitle">Choisir un vêtement</h3>
+        <button class="picker-close" onclick="closePicker()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <input class="picker-search" id="pickerSearch" type="text" placeholder="Rechercher…" oninput="renderPickerGrid(this.value)">
+      <div class="picker-filters" id="pickerFilters"></div>
+      <div class="picker-grid"    id="pickerGrid"></div>
+      <button class="confirm-btn" id="confirmBtn" onclick="confirmPicker()" disabled>Confirmer</button>
+    </div>
+  </div>
+
+  <!-- ── Panneau anti-répétition ───────────────────────── -->
+  <div class="repetition-panel" id="repetitionPanel">
+    <div class="rep-title">Port fréquent (30 j)</div>
+    <div class="rep-list" id="repList"></div>
+  </div>
+
+  <!-- ── Toast ─────────────────────────────────────────── -->
+  <div class="toast" id="toast">
+    <span id="toastMsg">Enregistré</span>
+  </div>
+
+  <!-- ── Navigation bottom bar ─────────────────────────── -->
+  <nav class="bottom-nav">
+    <a href="index.html"     class="nav-item">🏠<span>Accueil</span></a>
+    <a href="dressing.html"  class="nav-item">👗<span>Dressing</span></a>
+    <a href="calendrier.html" class="nav-item active">📅<span>Calendrier</span></a>
+    <a href="Ajout.html"     class="nav-item">➕<span>Ajouter</span></a>
+    <a href="profil.html"    class="nav-item">👤<span>Profil</span></a>
+  </nav>
+
+  <script src="security.js"></script>
+  <script src="calendrier.js"></script>
 </body>
 </html>
