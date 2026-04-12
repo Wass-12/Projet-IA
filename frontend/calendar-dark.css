@@ -1,7 +1,7 @@
 /* ============================================================
-   IMPORT POLICES
+   IMPORT POLICES — alignées sur le landing
 ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
 
 /* ============================================================
    RESET MINIMAL
@@ -9,33 +9,39 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ============================================================
-   VARIABLES GLOBALES
+   VARIABLES GLOBALES — calquées sur le landing
 ============================================================ */
 :root {
-  --bg: #F5F2EC;
-  --surface: #FDFCFA;
-  --ink: #1C1A16;
-  --ink2: #6B6660;
-  --ink3: #A8A49F;
-  --accent: #C8572A;
-  --accent-soft: #F5E8E2;
-  --border: rgba(28,26,22,0.1);
-  --border2: rgba(28,26,22,0.06);
-  --radius: 16px;
-  --radius-sm: 10px;
-  --green: #2E7D52;
-  --green-soft: #E3F2E8;
-  --blue: #3B6EA5;
-  --blue-soft: #E3EDF7;
+  --bg:          #0a0a0b;
+  --bg2:         #111113;
+  --bg3:         #1a1a1d;
+  --bg4:         #222226;
+  --border:      rgba(255,255,255,0.07);
+  --border2:     rgba(255,255,255,0.13);
+  --text:        #f0ede8;
+  --text2:       #8a8882;
+  --text3:       #555450;
+  --gold:        #c9a96e;
+  --gold2:       #e8c98a;
+  --gold-dim:    rgba(201,169,110,0.12);
+  --green:       #1d9e75;
+  --green-soft:  rgba(29,158,117,0.12);
+  --blue:        #3b6ea5;
+  --blue-soft:   rgba(59,110,165,0.12);
+  --red-soft:    rgba(196,91,91,0.12);
+  --font-display:'Cormorant Garamond', Georgia, serif;
+  --font-body:   'DM Sans', system-ui, sans-serif;
+  --radius:      16px;
+  --radius-sm:   10px;
 }
 
 /* ============================================================
    LAYOUT PAGE
 ============================================================ */
 body {
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-body);
   background: var(--bg);
-  color: var(--ink);
+  color: var(--text);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -43,6 +49,8 @@ body {
   padding: 24px 16px 120px;
   max-width: 480px;
   margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 /* ============================================================
@@ -57,38 +65,39 @@ header {
   gap: 12px;
 }
 
-/* Boutons < > navigation */
 .nav-btn {
   width: 38px; height: 38px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--ink2);
+  background: var(--bg2);
+  color: var(--text2);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.15s;
   flex-shrink: 0;
 }
 
-.nav-btn:hover { background: var(--bg); color: var(--ink); }
+.nav-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
 .nav-btn:active { transform: scale(0.94); }
 
 .header-center { text-align: center; flex: 1; }
 
-/* Titre "Avril 2026" en serif italique */
+/* Titre "Avril 2026" — Cormorant italique, comme le landing */
 .month-title {
-  font-family: 'Fraunces', serif;
+  font-family: var(--font-display);
   font-size: 22px;
   font-weight: 300;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+  letter-spacing: -0.01em;
+  color: var(--text);
   font-style: italic;
 }
 
 .month-sub {
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink3);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
   margin-top: 2px;
 }
 
@@ -106,49 +115,49 @@ header {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 300;
   letter-spacing: 0.06em;
-  color: var(--ink2);
+  color: var(--text3);
 }
 
 .legend-dot {
-  width: 8px; height: 8px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .legend-dot.worn    { background: var(--green); }
 .legend-dot.planned { background: var(--blue); }
-.legend-dot.today   { background: var(--accent); }
+.legend-dot.today   { background: var(--gold); }
 
 /* ============================================================
    CALENDRIER
 ============================================================ */
 .calendar-wrap {
   width: 100%;
-  background: var(--surface);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
 }
 
-/* En-têtes jours de la semaine */
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border);
   padding: 10px 0 8px;
 }
 
 .weekdays span {
   text-align: center;
   font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink3);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--text3);
   text-transform: uppercase;
 }
 
-/* Grille des cellules */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -170,52 +179,51 @@ header {
   padding: 4px 2px;
 }
 
-/* Séparateur entre cellules */
 .day-cell::after {
   content: '';
   position: absolute;
   inset: 0;
-  border-right: 1px solid var(--border2);
-  border-bottom: 1px solid var(--border2);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   pointer-events: none;
 }
 
-.day-cell:hover { background: var(--bg); }
+.day-cell:hover { background: var(--bg3); }
 
-/* Jours hors du mois courant */
-.day-cell.other-month .day-num { opacity: 0.25; }
+.day-cell.other-month .day-num { opacity: 0.2; }
 .day-cell.other-month { pointer-events: none; }
 
-/* Numéro du jour */
 .day-num {
+  font-family: var(--font-body);
   font-size: 12px;
-  font-weight: 400;
-  color: var(--ink2);
+  font-weight: 300;
+  color: var(--text2);
   line-height: 1;
   z-index: 1;
 }
 
-/* Aujourd'hui : cercle terracotta */
+/* Aujourd'hui : cercle gold */
 .day-cell.is-today .day-num {
-  color: white;
-  background: var(--accent);
+  color: #0a0a0b;
+  background: var(--gold);
   width: 22px; height: 22px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px;
+  font-weight: 500;
 }
 
-/* Jour sélectionné : cercle encre */
+/* Jour sélectionné : cercle texte principal */
 .day-cell.selected .day-num {
-  color: white;
-  background: var(--ink);
+  color: #0a0a0b;
+  background: var(--text);
   width: 22px; height: 22px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px;
+  font-weight: 500;
 }
 
-/* Point indicateur sous le numéro */
 .day-dot {
   width: 4px; height: 4px;
   border-radius: 50%;
@@ -226,13 +234,12 @@ header {
 .day-cell.has-worn    .day-dot { background: var(--green); }
 .day-cell.has-planned .day-dot { background: var(--blue); }
 
-/* Mini pastilles couleur du vêtement */
 .day-preview { display: flex; gap: 2px; z-index: 1; }
 
 .day-color {
   width: 5px; height: 5px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* ============================================================
@@ -241,7 +248,7 @@ header {
 .day-panel {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  background: var(--surface);
+  background: var(--bg2);
   border-top: 1px solid var(--border);
   border-radius: 20px 20px 0 0;
   padding: 20px 20px 36px;
@@ -254,12 +261,11 @@ header {
 
 .day-panel.open { transform: translateY(0); }
 
-/* Poignée visuelle */
 .day-panel::before {
   content: '';
   display: block;
   width: 36px; height: 3px;
-  background: var(--border);
+  background: var(--border2);
   border-radius: 2px;
   margin: 0 auto 16px;
 }
@@ -271,54 +277,58 @@ header {
   margin-bottom: 16px;
 }
 
-/* Date en serif */
+/* Date en Cormorant italique */
 .panel-date {
-  font-family: 'Fraunces', serif;
-  font-size: 18px;
+  font-family: var(--font-display);
+  font-size: 20px;
   font-weight: 300;
   font-style: italic;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .panel-status {
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink3);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
   margin-top: 3px;
 }
 
-/* Bouton fermer (×) */
 .close-btn {
   width: 32px; height: 32px;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--ink2);
+  background: var(--bg3);
+  color: var(--text2);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.15s;
   flex-shrink: 0;
 }
 
-.close-btn:hover { background: var(--surface); color: var(--ink); }
+.close-btn:hover { background: var(--bg4); color: var(--text); border-color: var(--border2); }
 
 .panel-body { margin-bottom: 14px; min-height: 80px; }
 
-/* Carte d'un vêtement dans le panneau */
+/* Carte vêtement dans le panneau */
 .outfit-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--bg);
+  background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px;
+  transition: border-color 0.2s;
 }
+
+.outfit-card:hover { border-color: var(--border2); }
 
 .outfit-thumb {
   width: 52px; height: 52px;
   border-radius: 8px;
-  background: var(--surface);
+  background: var(--bg4);
   border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   font-size: 24px;
@@ -331,38 +341,45 @@ header {
 .outfit-info { flex: 1; min-width: 0; }
 
 .outfit-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.outfit-meta { font-size: 11px; color: var(--ink2); margin-top: 3px; }
+.outfit-meta {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text2);
+  margin-top: 3px;
+}
 
-/* Badge Porté / Planifié */
+/* Badges Porté / Planifié */
 .outfit-badge {
   font-size: 9px;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 3px 8px;
-  border-radius: 20px;
+  border-radius: 2px;
   flex-shrink: 0;
 }
 
-.outfit-badge.worn    { background: var(--green-soft); color: var(--green); }
-.outfit-badge.planned { background: var(--blue-soft);  color: var(--blue); }
+.outfit-badge.worn    { background: var(--green-soft);  color: var(--green); border: 1px solid rgba(29,158,117,0.25); }
+.outfit-badge.planned { background: var(--blue-soft);   color: #6496c8;      border: 1px solid rgba(59,110,165,0.25); }
 
 /* État vide */
 .panel-empty {
   text-align: center;
   padding: 20px 0;
-  color: var(--ink3);
-  font-size: 12px;
+  color: var(--text3);
+  font-size: 13px;
+  font-weight: 300;
 }
 
-.panel-empty svg { opacity: 0.3; margin-bottom: 8px; }
+.panel-empty svg { opacity: 0.2; margin-bottom: 8px; }
 
 /* Boutons d'action */
 .panel-actions { display: flex; gap: 8px; }
@@ -370,25 +387,32 @@ header {
 .action-btn {
   flex: 1;
   padding: 11px;
-  border-radius: var(--radius-sm);
+  border-radius: 2px;
   border: 1px solid var(--border);
   background: transparent;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-body);
   font-size: 11px;
-  letter-spacing: 0.05em;
-  color: var(--ink2);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text2);
   cursor: pointer;
   transition: all 0.15s;
   display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 
-.action-btn:hover { background: var(--bg); color: var(--ink); }
+.action-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
 
-.action-btn.primary { background: var(--ink); color: white; border-color: var(--ink); }
-.action-btn.primary:hover { background: #2C2A26; }
+.action-btn.primary {
+  background: var(--gold);
+  color: #0a0a0b;
+  border-color: var(--gold);
+}
 
-.action-btn.danger { color: #C45B5B; border-color: rgba(196,91,91,0.2); }
-.action-btn.danger:hover { background: #FDF0F0; }
+.action-btn.primary:hover { background: var(--gold2); border-color: var(--gold2); }
+
+.action-btn.danger { color: #c45b5b; border-color: rgba(196,91,91,0.2); }
+.action-btn.danger:hover { background: var(--red-soft); color: #d47070; }
 
 /* ============================================================
    PICKER (overlay sélection vêtement)
@@ -396,7 +420,7 @@ header {
 .picker-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(28,26,22,0.5);
+  background: rgba(0,0,0,0.75);
   z-index: 80;
   display: flex;
   align-items: flex-end;
@@ -411,7 +435,7 @@ header {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  background: var(--surface);
+  background: var(--bg2);
   border-radius: 20px 20px 0 0;
   border-top: 1px solid var(--border);
   padding: 20px 20px 36px;
@@ -424,12 +448,11 @@ header {
 
 .picker-overlay.open .picker-card { transform: translateY(0); }
 
-/* Poignée */
 .picker-card::before {
   content: '';
   display: block;
   width: 36px; height: 3px;
-  background: var(--border);
+  background: var(--border2);
   border-radius: 2px;
   margin: 0 auto 16px;
   flex-shrink: 0;
@@ -444,11 +467,11 @@ header {
 }
 
 .picker-title {
-  font-family: 'Fraunces', serif;
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
   font-weight: 300;
   font-style: italic;
-  color: var(--ink);
+  color: var(--text);
 }
 
 /* Barre de recherche */
@@ -456,27 +479,31 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--bg);
+  background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 9px 12px;
   margin-bottom: 12px;
   flex-shrink: 0;
+  transition: border-color 0.2s;
 }
 
-.picker-search svg { color: var(--ink3); flex-shrink: 0; }
+.picker-search:focus-within { border-color: var(--border2); }
+
+.picker-search svg { color: var(--text3); flex-shrink: 0; }
 
 .picker-search input {
   border: none;
   background: transparent;
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text);
   outline: none;
   flex: 1;
 }
 
-.picker-search input::placeholder { color: var(--ink3); }
+.picker-search input::placeholder { color: var(--text3); }
 
 /* Filtres catégorie */
 .picker-filters {
@@ -492,22 +519,23 @@ header {
 .picker-filters::-webkit-scrollbar { display: none; }
 
 .filter-chip {
-  padding: 5px 12px;
-  border-radius: 20px;
+  padding: 5px 14px;
+  border-radius: 2px;
   border: 1px solid var(--border);
   background: transparent;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 400;
   letter-spacing: 0.06em;
-  color: var(--ink2);
+  color: var(--text2);
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
   flex-shrink: 0;
 }
 
-.filter-chip:hover { background: var(--bg); color: var(--ink); }
-.filter-chip.active { background: var(--ink); color: white; border-color: var(--ink); }
+.filter-chip:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
+.filter-chip.active { background: var(--gold-dim); color: var(--gold); border-color: rgba(201,169,110,0.35); }
 
 /* Grille picker */
 .picker-grid {
@@ -520,23 +548,23 @@ header {
 }
 
 .picker-item {
-  border: 1.5px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
   cursor: pointer;
   transition: all 0.15s;
-  background: var(--bg);
+  background: var(--bg3);
   position: relative;
 }
 
-.picker-item:hover { border-color: var(--ink2); }
-.picker-item.selected { border-color: var(--accent); background: var(--accent-soft); }
+.picker-item:hover { border-color: var(--border2); background: var(--bg4); }
+.picker-item.selected { border-color: rgba(201,169,110,0.5); background: var(--gold-dim); }
 
 .picker-thumb {
   aspect-ratio: 3/4;
   display: flex; align-items: center; justify-content: center;
   font-size: 28px;
-  background: var(--surface);
+  background: var(--bg4);
   overflow: hidden;
 }
 
@@ -544,8 +572,9 @@ header {
 
 .picker-label {
   padding: 5px 6px;
-  font-size: 9px;
-  color: var(--ink2);
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--text2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -558,11 +587,13 @@ header {
   top: 4px; right: 4px;
   width: 18px; height: 18px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--gold);
   display: none;
   align-items: center;
   justify-content: center;
 }
+
+.picker-check svg { color: #0a0a0b; }
 
 .picker-item.selected .picker-check { display: flex; }
 
@@ -572,20 +603,22 @@ header {
 .confirm-btn {
   width: 100%;
   padding: 13px;
-  background: var(--ink);
-  color: white;
+  background: var(--gold);
+  color: #0a0a0b;
   border: none;
-  border-radius: var(--radius-sm);
-  font-family: 'DM Mono', monospace;
+  border-radius: 2px;
+  font-family: var(--font-body);
   font-size: 12px;
-  letter-spacing: 0.05em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.confirm-btn:hover:not(:disabled) { background: #2C2A26; }
+.confirm-btn:hover:not(:disabled) { background: var(--gold2); }
 .confirm-btn:active:not(:disabled) { transform: scale(0.98); }
-.confirm-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.confirm-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 /* ============================================================
    PANNEAU ANTI-RÉPÉTITION
@@ -593,7 +626,7 @@ header {
 .repetition-panel {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  background: var(--surface);
+  background: var(--bg2);
   border-top: 1px solid var(--border);
   padding: 12px 20px 20px;
   max-width: 480px;
@@ -612,17 +645,30 @@ header {
   margin-bottom: 12px;
 }
 
-.rep-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--ink); }
-.rep-sub { font-size: 10px; color: var(--ink3); margin-top: 1px; }
+.rep-title {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
 
-/* Badge Premium dégradé */
+.rep-sub {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--text3);
+  margin-top: 1px;
+}
+
+/* Badge Premium — reprend le gradient du landing */
 .premium-badge {
   font-size: 9px;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 3px 8px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #D4A843, #C8572A);
+  border-radius: 2px;
+  background: linear-gradient(135deg, #d4a843, #c8572a);
   color: white;
 }
 
@@ -648,18 +694,20 @@ header {
 
 .rep-thumb {
   width: 44px; height: 44px;
-  border-radius: 10px;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
+  border-radius: 2px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
   font-size: 20px;
   position: relative;
   overflow: hidden;
+  transition: border-color 0.15s;
 }
+
+.rep-thumb:hover { border-color: var(--border2); }
 
 .rep-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Badge nombre de ports (vert / orange / rouge selon fréquence) */
 .rep-count {
   position: absolute;
   top: -3px; right: -3px;
@@ -669,16 +717,17 @@ header {
   font-weight: 500;
   display: flex; align-items: center; justify-content: center;
   color: white;
-  border: 1.5px solid var(--surface);
+  border: 1.5px solid var(--bg2);
 }
 
 .rep-count.low  { background: var(--green); }
-.rep-count.mid  { background: #D4A843; }
-.rep-count.high { background: #C45B5B; }
+.rep-count.mid  { background: #c9a96e; }
+.rep-count.high { background: #c45b5b; }
 
 .rep-name {
   font-size: 9px;
-  color: var(--ink3);
+  font-weight: 300;
+  color: var(--text3);
   max-width: 48px;
   text-align: center;
   white-space: nowrap;
@@ -694,11 +743,13 @@ header {
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%) translateY(60px);
-  background: var(--ink);
-  color: white;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text);
   padding: 11px 18px;
-  border-radius: 30px;
-  font-size: 11px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.05em;
   display: flex; align-items: center; gap: 8px;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);

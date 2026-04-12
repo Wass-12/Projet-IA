@@ -1,9 +1,9 @@
 /* ============================================================
-   IMPORT POLICES
-   DM Mono  → texte UI, champs, labels
-   Fraunces → logo et titres italiques (serif expressif)
+   IMPORT POLICES — alignées sur le landing
+   Cormorant Garamond → logo et titres italiques
+   DM Sans            → texte UI, champs, labels
 ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
 
 /* ============================================================
    RESET MINIMAL
@@ -11,36 +11,43 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ============================================================
-   VARIABLES GLOBALES
+   VARIABLES GLOBALES — calquées sur le landing
 ============================================================ */
 :root {
-  --bg: #F5F2EC;            /* fond page (crème chaud) */
-  --surface: #FDFCFA;       /* fond carte (blanc cassé) */
-  --ink: #1C1A16;           /* texte principal */
-  --ink2: #6B6660;          /* texte secondaire */
-  --ink3: #A8A49F;          /* labels, hints */
-  --accent: #C8572A;        /* terracotta — couleur principale */
-  --accent-soft: #F5E8E2;   /* fond hover sur zone upload */
-  --border: rgba(28,26,22,0.1);   /* bordure normale */
-  --border2: rgba(28,26,22,0.06); /* bordure très légère */
-  --radius: 16px;           /* rayon carte principale */
-  --radius-sm: 10px;        /* rayon éléments internes */
-  --green: #2E7D52;         /* couleur score de confiance */
-  --green-soft: #E3F2E8;    /* fond badge confiance */
+  --bg:          #0a0a0b;
+  --bg2:         #111113;
+  --bg3:         #1a1a1d;
+  --bg4:         #222226;
+  --border:      rgba(255,255,255,0.07);
+  --border2:     rgba(255,255,255,0.13);
+  --text:        #f0ede8;
+  --text2:       #8a8882;
+  --text3:       #555450;
+  --gold:        #c9a96e;
+  --gold2:       #e8c98a;
+  --gold-dim:    rgba(201,169,110,0.12);
+  --green:       #1d9e75;
+  --green-soft:  rgba(29,158,117,0.12);
+  --font-display:'Cormorant Garamond', Georgia, serif;
+  --font-body:   'DM Sans', system-ui, sans-serif;
+  --radius:      16px;
+  --radius-sm:   10px;
 }
 
 /* ============================================================
    LAYOUT PAGE
 ============================================================ */
 body {
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-body);
   background: var(--bg);
-  color: var(--ink);
+  color: var(--text);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 24px 16px 64px;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 /* ============================================================
@@ -56,25 +63,27 @@ header {
 }
 
 .logo {
-  font-family: 'Fraunces', serif;
+  font-family: var(--font-display);
   font-size: 22px;
   font-weight: 300;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-decoration: none;
 }
 
-/* "robe" en italique terracotta */
-.logo span { color: var(--accent); font-style: italic; }
+/* "Sync" en italique gold */
+.logo span { color: var(--gold); font-style: italic; }
 
 /* Badge compteur ex: "12 pièces" */
 .count-badge {
   font-size: 11px;
-  color: var(--ink2);
-  background: var(--border2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 4px 12px;
+  font-weight: 300;
   letter-spacing: 0.08em;
+  color: var(--text3);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 4px 12px;
 }
 
 /* ============================================================
@@ -83,86 +92,79 @@ header {
 .main-card {
   width: 100%;
   max-width: 420px;
-  background: var(--surface);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden; /* contient les enfants absolus */
+  overflow: hidden;
 }
 
 /* ============================================================
    ZONE SCANNER
-   Ratio 3/4 pour ressembler à un viewfinder mobile
 ============================================================ */
 .scanner-zone {
   position: relative;
   width: 100%;
   aspect-ratio: 3/4;
-  background: #1C1A16; /* fond sombre quasi-noir */
+  background: #050507;
   overflow: hidden;
   cursor: pointer;
 }
 
-/* Flux vidéo caméra */
 #videoEl {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
-  display: none; /* affiché par JS quand la caméra est active */
+  display: none;
 }
 
-/* Canvas hors écran pour la capture de frame */
 #canvasEl { display: none; }
 
-/* Image de prévisualisation (capture ou import) */
 .preview-img {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
-  display: none; /* affiché par JS après capture/import */
+  display: none;
 }
 
-/* État repos : icône + texte centré */
+/* État repos */
 .scanner-idle {
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 16px;
-  color: #6B6660;
+  color: var(--text3);
 }
 
-.scanner-idle svg { opacity: 0.4; }
+.scanner-idle svg { opacity: 0.25; }
 
 .scanner-idle p {
   font-size: 12px;
-  letter-spacing: 0.05em;
-  opacity: 0.6;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
 }
 
-/* ---- Coins de visée (4 coins positionnés en absolu) ---- */
+/* ---- Coins de visée — gold semi-transparent ---- */
 .corner-tl, .corner-tr, .corner-bl, .corner-br {
   position: absolute;
   width: 28px; height: 28px;
-  border-color: rgba(200,87,42,0.7); /* terracotta semi-transparent */
+  border-color: rgba(201,169,110,0.6);
   border-style: solid;
 }
-.corner-tl { top: 20px; left: 20px;   border-width: 2px 0 0 2px; border-radius: 4px 0 0 0; }
-.corner-tr { top: 20px; right: 20px;  border-width: 2px 2px 0 0; border-radius: 0 4px 0 0; }
-.corner-bl { bottom: 20px; left: 20px;  border-width: 0 0 2px 2px; border-radius: 0 0 0 4px; }
-.corner-br { bottom: 20px; right: 20px; border-width: 0 2px 2px 0; border-radius: 0 0 4px 0; }
+.corner-tl { top: 20px; left: 20px;   border-width: 1.5px 0 0 1.5px; border-radius: 2px 0 0 0; }
+.corner-tr { top: 20px; right: 20px;  border-width: 1.5px 1.5px 0 0; border-radius: 0 2px 0 0; }
+.corner-bl { bottom: 20px; left: 20px;  border-width: 0 0 1.5px 1.5px; border-radius: 0 0 0 2px; }
+.corner-br { bottom: 20px; right: 20px; border-width: 0 1.5px 1.5px 0; border-radius: 0 0 2px 0; }
 
 /* ---- Ligne de scan animée ---- */
 .scan-line {
   position: absolute;
   left: 20px; right: 20px;
   height: 1px;
-  /* dégradé pour effet faisceau lumineux */
-  background: linear-gradient(90deg, transparent, rgba(200,87,42,0.8), transparent);
+  background: linear-gradient(90deg, transparent, rgba(201,169,110,0.7), transparent);
   top: 20px;
   animation: scanAnim 2s ease-in-out infinite;
-  display: none; /* activée par la classe .active */
+  display: none;
 }
 
-/* Descend de haut en bas puis revient discrètement */
 @keyframes scanAnim {
   0%  { top: 20px; opacity: 1; }
   90% { top: calc(100% - 20px); opacity: 1; }
@@ -171,14 +173,14 @@ header {
 
 .scan-line.active { display: block; }
 
-/* Texte "Cadrez le vêtement" superposé en bas du scanner */
 .scanner-overlay-text {
   position: absolute;
   bottom: 16px; left: 0; right: 0;
   text-align: center;
   font-size: 11px;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.5);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(240,237,232,0.4);
   display: none;
 }
 
@@ -192,32 +194,31 @@ header {
   transform: translateX(-50%);
   width: 60px; height: 60px;
   border-radius: 50%;
-  background: white;
-  border: 3px solid rgba(255,255,255,0.3); /* halo autour du bouton */
+  background: var(--gold);
+  border: 3px solid rgba(201,169,110,0.25);
   cursor: pointer;
-  display: none; /* affiché quand caméra active */
+  display: none;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s;
+  transition: transform 0.15s, background 0.15s;
   outline: none;
 }
 
-/* Feedback tactile au clic */
+.capture-btn:hover { background: var(--gold2); }
 .capture-btn:active { transform: translateX(-50%) scale(0.93); }
 .capture-btn.visible { display: flex; }
 
-/* Disque intérieur blanc (look appareil photo) */
 .capture-inner {
   width: 44px; height: 44px;
   border-radius: 50%;
-  background: white;
-  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(10,10,11,0.25);
+  border: 1px solid rgba(10,10,11,0.15);
 }
 
-/* ---- Overlay d'analyse (spinner + texte d'étape) ---- */
+/* ---- Overlay d'analyse ---- */
 .analyzing-overlay {
   position: absolute; inset: 0;
-  background: rgba(28,26,22,0.82); /* voile sombre semi-transparent */
+  background: rgba(5,5,7,0.88);
   display: none;
   flex-direction: column;
   align-items: center;
@@ -227,101 +228,109 @@ header {
 
 .analyzing-overlay.visible { display: flex; }
 
-/* Spinner de chargement */
 .spinner {
   width: 32px; height: 32px;
-  border: 2px solid rgba(255,255,255,0.15);
-  border-top-color: var(--accent); /* arc terracotta */
+  border: 1.5px solid rgba(240,237,232,0.1);
+  border-top-color: var(--gold);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Sous-texte de l'étape en cours (ex: "analyse chromatique") */
 .analyzing-text {
   font-size: 11px;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.6);
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
 }
 
-/* Titre de l'étape en cours (ex: "Lecture des couleurs…") */
 .analyzing-step {
-  font-family: 'Fraunces', serif;
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
   font-weight: 300;
-  color: white;
+  color: var(--text);
   font-style: italic;
 }
 
 /* ============================================================
-   BOUTONS DE CONTRÔLE (Caméra / Photo / Exemple)
+   BOUTONS DE CONTRÔLE
 ============================================================ */
 .scanner-controls {
   padding: 16px;
   display: flex;
   gap: 10px;
-  border-bottom: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border);
 }
 
 .ctrl-btn {
   flex: 1;
   padding: 11px;
-  border-radius: var(--radius-sm);
+  border-radius: 2px;
   border: 1px solid var(--border);
   background: transparent;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-body);
   font-size: 11px;
-  letter-spacing: 0.06em;
-  color: var(--ink2);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text2);
   cursor: pointer;
   transition: all 0.15s;
   display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 
-.ctrl-btn:hover { background: var(--bg); color: var(--ink); }
+.ctrl-btn:hover { background: var(--bg3); color: var(--text); border-color: var(--border2); }
 
-/* Variante primaire (fond sombre) : bouton Caméra actif */
 .ctrl-btn.primary {
-  background: var(--ink);
-  color: white;
-  border-color: var(--ink);
+  background: var(--gold);
+  color: #0a0a0b;
+  border-color: var(--gold);
 }
 
-.ctrl-btn.primary:hover { background: #2C2A26; }
+.ctrl-btn.primary:hover { background: var(--gold2); border-color: var(--gold2); }
 
 /* ============================================================
-   ZONE D'UPLOAD (drag & drop / clic)
+   ZONE D'UPLOAD
 ============================================================ */
 .upload-zone {
   margin: 16px;
-  border: 1.5px dashed var(--border);
+  border: 1px dashed rgba(201,169,110,0.25);
   border-radius: var(--radius-sm);
   padding: 24px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
-  display: none; /* affichée/masquée par toggleUpload() */
+  display: none;
 }
 
 .upload-zone.visible { display: block; }
-.upload-zone:hover { border-color: var(--accent); background: var(--accent-soft); }
-.upload-zone p { font-size: 12px; color: var(--ink2); margin-top: 8px; }
 
-/* Input file réel, invisible (déclenché par le clic sur la zone) */
+.upload-zone:hover {
+  border-color: rgba(201,169,110,0.5);
+  background: var(--gold-dim);
+}
+
+.upload-zone p {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
 #fileInput { display: none; }
 
 /* ============================================================
-   RÉSULTATS IA (section dépliée après analyse)
+   RÉSULTATS IA
 ============================================================ */
 .ai-results {
   padding: 16px;
-  display: none; /* visible après analyse */
+  display: none;
 }
 
 .ai-results.visible { display: block; }
 
-/* En-tête : label "Analyse IA" + badge de confiance */
 .ai-header {
   display: flex;
   align-items: center;
@@ -331,21 +340,25 @@ header {
 
 .ai-label {
   font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--ink3);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text3);
   text-transform: uppercase;
 }
 
-/* Badge vert "Confiance XX%" */
+/* Badge confiance — gold au lieu de vert */
 .ai-confidence {
   font-size: 10px;
-  color: var(--green);
-  background: var(--green-soft);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(201,169,110,0.25);
   padding: 3px 8px;
-  border-radius: 20px;
+  border-radius: 2px;
 }
 
-/* Grille 2 colonnes pour les champs du formulaire */
+/* Grille 2 colonnes */
 .field-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -353,64 +366,60 @@ header {
   margin-bottom: 10px;
 }
 
-/* Champ qui occupe les 2 colonnes */
 .field-full { grid-column: 1 / -1; }
 
-/* Conteneur label + input */
 .field {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-/* Label au-dessus du champ */
 .field label {
   font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--ink3);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--text3);
   text-transform: uppercase;
 }
 
-/* Wrapper relatif pour positionner le point IA */
 .field-value { position: relative; }
 
-/* Style commun input et select */
 .field-value input,
 .field-value select {
   width: 100%;
   padding: 9px 12px;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-body);
   font-size: 13px;
-  color: var(--ink);
-  background: var(--bg);
+  font-weight: 300;
+  color: var(--text);
+  background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background 0.15s;
   -webkit-appearance: none;
-  appearance: none; /* retire le style natif du select */
+  appearance: none;
 }
 
-/* Focus : bordure terracotta + fond blanc */
 .field-value input:focus,
 .field-value select:focus {
-  border-color: var(--accent);
-  background: var(--surface);
+  border-color: rgba(201,169,110,0.4);
+  background: var(--bg4);
 }
 
-/* Petit point orange = valeur suggérée par l'IA (indicateur visuel) */
+/* Point gold = valeur suggérée par l'IA */
 .field-value .ai-dot {
   position: absolute;
   right: 10px; top: 50%;
   transform: translateY(-50%);
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--gold);
   opacity: 0.6;
 }
 
 /* ============================================================
-   SÉLECTEUR DE COULEURS (puces rondes cliquables)
+   SÉLECTEUR DE COULEURS
 ============================================================ */
 .color-row {
   display: flex;
@@ -418,7 +427,7 @@ header {
   align-items: center;
   flex-wrap: wrap;
   padding: 8px 12px;
-  background: var(--bg);
+  background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   min-height: 40px;
@@ -434,66 +443,62 @@ header {
 }
 
 .color-chip:hover { transform: scale(1.15); }
-
-/* Bordure encre = couleur sélectionnée */
-.color-chip.selected { border-color: var(--ink); transform: scale(1.1); }
+.color-chip.selected { border-color: var(--gold); transform: scale(1.1); }
 
 /* ============================================================
-   TAGS D'OCCASIONS (editables, ajout libre)
+   TAGS D'OCCASIONS
 ============================================================ */
 .tag-row {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   padding: 8px 12px;
-  background: var(--bg);
+  background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   min-height: 40px;
-  cursor: text; /* invite à taper */
+  cursor: text;
 }
 
-/* Puce tag individuelle */
 .tag {
-  background: var(--surface);
+  background: var(--bg4);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 2px;
   padding: 3px 10px;
   font-size: 11px;
-  color: var(--ink2);
+  font-weight: 400;
+  color: var(--text2);
   cursor: pointer;
   display: flex; align-items: center; gap: 5px;
   transition: all 0.15s;
 }
 
-/* Hover : couleur terracotta pour signaler la suppression */
-.tag:hover { border-color: var(--accent); color: var(--accent); }
+.tag:hover { border-color: rgba(201,169,110,0.35); color: var(--gold); }
 
-/* Croix de suppression dans chaque tag */
 .tag .remove {
   font-size: 14px;
   line-height: 1;
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
-/* Input texte pour ajouter un nouveau tag */
 .tag-input {
   border: none;
   background: transparent;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-body);
   font-size: 11px;
-  color: var(--ink);
+  font-weight: 300;
+  color: var(--text);
   outline: none;
   min-width: 60px;
   flex: 1;
 }
 
 /* ============================================================
-   SÉPARATEUR HORIZONTAL
+   SÉPARATEUR
 ============================================================ */
 .section-divider {
   height: 1px;
-  background: var(--border2);
+  background: var(--border);
   margin: 14px 0;
 }
 
@@ -502,7 +507,7 @@ header {
 ============================================================ */
 .save-zone {
   padding: 0 16px 16px;
-  display: none; /* affiché après analyse */
+  display: none;
 }
 
 .save-zone.visible { display: block; }
@@ -510,26 +515,31 @@ header {
 .save-btn {
   width: 100%;
   padding: 14px;
-  background: var(--ink);
-  color: white;
+  background: var(--gold);
+  color: #0a0a0b;
   border: none;
-  border-radius: var(--radius-sm);
-  font-family: 'DM Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.05em;
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.15s;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 
-.save-btn:hover { background: #2C2A26; }
+.save-btn:hover { background: var(--gold2); }
 .save-btn:active { transform: scale(0.98); }
 
 /* État "Ajouté !" : passe en vert */
-.save-btn.saved { background: var(--green); }
+.save-btn.saved {
+  background: var(--green);
+  color: white;
+}
 
 /* ============================================================
-   GRILLE GARDE-ROBE (items sauvegardés)
+   GRILLE GARDE-ROBE
 ============================================================ */
 .wardrobe-section {
   width: 100%;
@@ -538,10 +548,11 @@ header {
 }
 
 .wardrobe-title {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--ink3);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  color: var(--gold);
   margin-bottom: 14px;
   padding: 0 4px;
 }
@@ -553,23 +564,23 @@ header {
   gap: 10px;
 }
 
-/* Carte individuelle d'un vêtement */
 .wardrobe-item {
-  background: var(--surface);
+  background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.15s;
+  transition: border-color 0.2s, transform 0.15s;
 }
 
-/* Légère élévation au survol */
-.wardrobe-item:hover { transform: translateY(-2px); }
+.wardrobe-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--border2);
+}
 
-/* Miniature photo (ratio 3/4 = portrait vêtement) */
 .item-thumb {
   aspect-ratio: 3/4;
-  background: var(--bg);
+  background: var(--bg3);
   overflow: hidden;
 }
 
@@ -578,54 +589,53 @@ header {
   object-fit: cover;
 }
 
-/* Placeholder emoji si pas de photo */
 .item-thumb-placeholder {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
   font-size: 28px;
+  background: var(--bg3);
 }
 
 .item-info { padding: 8px; }
 
-/* Nom (marque ou type) tronqué si trop long */
 .item-name {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--ink);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Sous-titre type + taille */
 .item-sub {
   font-size: 10px;
-  color: var(--ink3);
+  font-weight: 300;
+  color: var(--text3);
   margin-top: 2px;
 }
 
 /* ============================================================
-   TOAST DE CONFIRMATION
-   Glisse depuis le bas grâce à la classe .show
+   TOAST
 ============================================================ */
 .toast {
   position: fixed;
   bottom: 24px;
-  left: 50%; transform: translateX(-50%) translateY(80px); /* caché sous l'écran */
-  background: var(--ink);
-  color: white;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text);
   padding: 12px 20px;
-  border-radius: 30px;
+  border-radius: 2px;
   font-size: 12px;
+  font-weight: 400;
   letter-spacing: 0.05em;
   display: flex; align-items: center; gap: 8px;
-  /* Ressort élastique à l'apparition */
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 100;
   white-space: nowrap;
 }
 
-/* Monte dans le viewport */
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 /* ============================================================
